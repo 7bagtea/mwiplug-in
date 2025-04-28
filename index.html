@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MWI插件總匯</title>
+  <title>MWI插件彙總</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
   <script>
@@ -19,7 +19,7 @@
             light: '#F8FAFC'
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui','sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
           },
         },
       }
@@ -30,17 +30,38 @@
       .content-auto {
         content-visibility: auto;
       }
-     .sidebar-shadow {
+      .sidebar-shadow {
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       }
-     .plugin-card {
+      .plugin-card {
         transition: all 0.3s ease;
       }
-     .plugin-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      .plugin-card a {
+        display: inline-block;
+        color: white;
+        padding: 4px 20px;
+        border-radius: 4px;
+        text-decoration: none;
       }
-     .smooth-scroll {
+      .plugin-card a.bg-primary {
+        background-color: #3B82F6;
+      }
+      .plugin-card a.bg-primary:hover {
+        background-color: rgba(59, 130, 246, 0.9);
+      }
+      .plugin-card a.bg-accent {
+        background-color: #F97316;
+      }
+      .plugin-card a.bg-accent:hover {
+        background-color: rgba(249, 115, 22, 0.9);
+      }
+      .plugin-card a.bg-secondary {
+        background-color: #64748B;
+      }
+      .plugin-card a.bg-secondary:hover {
+        background-color: rgba(100, 116, 139, 0.9);
+      }
+      .smooth-scroll {
         scroll-behavior: smooth;
       }
     }
@@ -49,8 +70,7 @@
 
 <body class="bg-light text-dark smooth-scroll">
   <!-- 側邊欄 -->
-  <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 
-ease-in-out lg:translate-x-0 -translate-x-full">
+  <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
     <div class="p-4 flex justify-between items-center border-b">
       <h2 class="text-xl font-bold text-primary">快速導航</h2>
       <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
@@ -59,14 +79,10 @@ ease-in-out lg:translate-x-0 -translate-x-full">
     </div>
     <nav class="py-4">
       <ul class="space-y-1 px-4">
-        <li><a href="#mw-summary" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-primary transition-
-colors">MWI插件總匯</a></li>
-        <li><a href="#must-have" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-colors">必
-裝系列</a></li>
-        <li><a href="#highly-recommended" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-
-colors">強烈推薦</a></li>
-        <li><a href="#optional" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-colors">可選
-</a></li>
+        <li><a href="#mw-summary" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-primary transition-colors">MWI插件彙總</a></li>
+        <li><a href="#must-have" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-colors">必裝系列</a></li>
+        <li><a href="#highly-recommended" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-colors">強烈推薦</a></li>
+        <li><a href="#optional" class="block py-2 px-3 rounded-md hover:bg-primary/10 text-dark transition-colors">可選</a></li>
       </ul>
     </nav>
   </div>
@@ -79,18 +95,17 @@ colors">強烈推薦</a></li>
         <button id="openSidebar" class="lg:hidden text-dark hover:text-primary transition-colors">
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
-        <h1 id="pageTitle" class="text-2xl font-bold text-primary">MWI插件總匯</h1>
+        <h1 id="pageTitle" class="text-2xl font-bold text-primary">MWI插件彙總</h1>
       </div>
     </header>
 
     <!-- 主要內容區域 -->
     <main class="container mx-auto px-4 py-8">
-      <!-- 插件總匯介紹 -->
+      <!-- 插件彙總介紹 -->
       <section id="mw-summary" class="mb-12">
         <div class="bg-gradient-to-r from-primary to-primary/70 text-white rounded-xl p-6 shadow-lg">
-          <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">MWI插件總匯</h2>
-          <p class="text-lg">本頁面收集了MWI遊戲中各類實用插件，幫助您提升遊戲體驗。點擊左側導航可快速查看不同類別的插
-件。</p>
+          <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">MWI插件彙總</h2>
+          <p class="text-lg">本頁面收集了MWI遊戲中各類實用插件，幫助您提升遊戲體驗。點擊左側導航可快速查看不同類別的插件。</p>
         </div>
       </section>
 
@@ -103,8 +118,7 @@ colors">強烈推薦</a></li>
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-primary mb-2">Tampermonkey-油猴</h3>
             <p class="text-gray-500 mb-3">網頁版裝插件必須裝這個</p>
-            <a href="https://www.tampermonkey.net/index.php?locale=zh" target="_blank" class="inline-block bg-primary 
-text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+            <a href="https://www.tampermonkey.net/index.php?locale=zh" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -112,8 +126,7 @@ text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-primary mb-2">MWITools</h3>
             <p class="text-gray-500 mb-3">基礎功能增強，遊戲體驗優化</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/494467-mwitools" target="_blank" class="inline-block bg-
-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/494467-mwitools" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -121,9 +134,7 @@ primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-primary mb-2">Steam版本兼容性插件</h3>
             <p class="text-gray-500 mb-3">Steam版本安裝MWItools前置條件</p>
-            <a href="https://raw.githubusercontent.com/YangLeda/Userscripts-For-MilkyWayIdle/refs/heads/main/MWITools 
-%20addon%20for%20Steam%20version.js" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md 
-hover:bg-primary/90 transition-colors">
+            <a href="https://raw.githubusercontent.com/YangLeda/Userscripts-For-MilkyWayIdle/refs/heads/main/MWITools %20addon%20for%20Steam%20version.js" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -139,8 +150,7 @@ hover:bg-primary/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-accent mb-2">Magic Way Idle</h3>
             <p class="text-gray-500 mb-3">國人排行/自定義頭像（腳本用戶間可見）</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/511240-magic-way-idle" target="_blank" class="inline-block 
-bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/511240-magic-way-idle" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -148,9 +158,7 @@ bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-accent mb-2">食用工具</h3>
             <p class="text-gray-500 mb-3">開箱記錄、箱子期望、離線統計、公會釘釘、出警隊友</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/499963-%E9%93%B6%E6%B2%B3%E5%A5%B6%E7%89%9B-%E9%A3%9F
-用工具" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-
-accent/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/499963-%E9%93%B6%E6%B2%B3%E5%A5%B6%E7%89%9B-%E9%A3%9F%E7%94%A8%E5%B7%A5%E5%85%B7" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -158,8 +166,7 @@ accent/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-accent mb-2">MWI TaskManager</h3>
             <p class="text-gray-500 mb-3">任務界面美化與排序優化</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/509720-mwi-taskmanager" target="_blank" class="inline-block 
-bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/509720-mwi-taskmanager" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -167,10 +174,7 @@ bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-accent mb-2">物品價格走勢</h3>
             <p class="text-gray-500 mb-3">內置價格走勢</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-
-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%9B%E5%95%86%E5%9F%8E%E4%B8%AD%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A
-%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md 
-hover:bg-accent/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%9B%E5%95%86%E5%9F%8E%E4%B8%AD%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -186,9 +190,7 @@ hover:bg-accent/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-secondary mb-2">在線強化統計</h3>
             <p class="text-gray-500 mb-3">強化概率統計</p>
-            <a href="https://greasyfork.org/zh-CN/scripts/531872-mwi-ultimate-enhancement-tracker-v3-7-3" 
-target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-
-colors">
+            <a href="https://greasyfork.org/zh-CN/scripts/531872-mwi-ultimate-enhancement-tracker-v3-7-3" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -196,9 +198,7 @@ colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-secondary mb-2">MWI房屋升級材料計算器</h3>
             <p class="text-gray-500 mb-3">自動計算房屋升級所需材料</p>
-            <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D
-%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 
-rounded-md hover:bg-secondary/90 transition-colors">
+            <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D%E6%96%99%E8%AE%A1%E7%AE%97%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -206,9 +206,7 @@ rounded-md hover:bg-secondary/90 transition-colors">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold text-secondary mb-2">好友助手</h3>
             <p class="text-gray-500 mb-3">為MWI遊戲的朋友頁面添加分組和備註功能</p>
-            <a href="https://greasyfork.cc/zh-CN/scripts/530646-mwi-%E5%A5%BD%E5%8F%8B%E5%8A%A9%E6%89%8B" 
-target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-
-colors">
+            <a href="https://greasyfork.cc/zh-CN/scripts/530646-mwi-%E5%A5%BD%E5%8F%8B%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -221,7 +219,7 @@ colors">
       <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="mb-4 md:mb-0">
-            <h3 class="text-xl font-bold mb-2">MWI插件總匯</h3>
+            <h3 class="text-xl font-bold mb-2">MWI插件彙總</h3>
             <p class="text-gray-400">為您提供MWI遊戲最佳插件體驗</p>
           </div>
           <div class="flex space-x-6">
@@ -237,7 +235,7 @@ colors">
           </div>
         </div>
         <div class="border-t border-gray-800 mt-6 pt-6 text-center text-gray-500">
-          <p>&copy; 2025 MWI插件總匯 - 保留所有權利</p>
+          <p>&copy; 2025 MWI插件彙總 - 保留所有權利</p>
         </div>
       </div>
     </footer>
@@ -270,4 +268,49 @@ colors">
     closeSidebarBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
 
-    // 導航鏈接點擊事件
+    // 導航鏈接點擊事件 - 關閉側邊欄並調整滾動位置和標題
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          const headerHeight = document.querySelector('header').offsetHeight;
+          const scrollTop = targetElement.offsetTop - headerHeight;
+          window.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+          });
+          pageTitle.textContent = link.textContent;
+        }
+        if (window.innerWidth < 1024) { // 僅在移動視圖下關閉
+          closeSidebar();
+        }
+      });
+    });
+
+    // 滾動時添加陰影效果
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('shadow-md');
+      } else {
+        header.classList.remove('shadow-md');
+      }
+    });
+
+    // 檢測屏幕尺寸變化，調整側邊欄狀態
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      } else if (!sidebar.classList.contains('-translate-x-full')) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  </script>
+</body>
+</html>
+    
