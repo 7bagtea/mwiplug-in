@@ -28,42 +28,42 @@
   <style type="text/tailwindcss">
     @layer utilities {
       .content-auto {
-        content-visibility: auto;
-      }
+          content-visibility: auto;
+        }
       .sidebar-shadow {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      }
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
       .plugin-card {
-        transition: all 0.3s ease;
-      }
+          transition: all 0.3s ease;
+        }
       .plugin-card a {
-        display: inline-block;
-        color: white;
-        padding: 4px 20px;
-        border-radius: 4px;
-        text-decoration: none;
-      }
+          display: inline-block;
+          color: white;
+          padding: 4px 20px;
+          border-radius: 4px;
+          text-decoration: none;
+        }
       .plugin-card a.bg-primary {
-        background-color: #3B82F6;
-      }
+          background-color: #3B82F6;
+        }
       .plugin-card a.bg-primary:hover {
-        background-color: rgba(59, 130, 246, 0.9);
-      }
+          background-color: rgba(59, 130, 246, 0.9);
+        }
       .plugin-card a.bg-accent {
-        background-color: #F97316;
-      }
+          background-color: #F97316;
+        }
       .plugin-card a.bg-accent:hover {
-        background-color: rgba(249, 115, 22, 0.9);
-      }
+          background-color: rgba(249, 115, 22, 0.9);
+        }
       .plugin-card a.bg-secondary {
-        background-color: #64748B;
-      }
+          background-color: #64748B;
+        }
       .plugin-card a.bg-secondary:hover {
-        background-color: rgba(100, 116, 139, 0.9);
-      }
+          background-color: rgba(100, 116, 139, 0.9);
+        }
       .smooth-scroll {
-        scroll-behavior: smooth;
-      }
+          scroll-behavior: smooth;
+        }
     }
 
     /* 页脚美化样式 */
@@ -156,19 +156,39 @@
     }
 
     /* 下拉菜单样式 */
-    nav ul li.relative {
-      position: relative;
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding-left: 20px;
     }
 
-    nav ul li.relative .absolute {
-      display: none;
-      min-width: 150px;
-      z-index: 40;
-      background-color: #DCF4BE;
-    }
-
-    nav ul li.relative:hover .absolute {
+    .submenu a {
       display: block;
+      padding: 6px 12px;
+      margin: 2px 0;
+      border-radius: 8px;
+      background-color: #f0f0f0;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.2s;
+    }
+
+    .submenu a:hover {
+      background-color: #e0e0e0;
+      transform: translateX(4px);
+    }
+
+    .nav-item.expanded + .submenu {
+      max-height: 200px;
+    }
+
+    .nav-item .fa-chevron-right {
+      transition: transform 0.3s ease;
+    }
+
+    .nav-item.expanded .fa-chevron-right {
+      transform: rotate(90deg);
     }
   </style>
 </head>
@@ -177,6 +197,7 @@
   <!-- 側邊欄 -->
   <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
     <div class="p-4 flex justify-between items-center border-b">
+      <!-- 左上角顯示為快速導航 -->
       <h2 class="text-xl font-bold text-primary">快速導航</h2>
       <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
         <i class="fa-solid fa-times"></i>
@@ -216,20 +237,20 @@
             <span class="nav-text">可選</span>
           </a>
         </li>
-        <li class="relative">
-          <a href="#" class="nav-item group" data-section="friend-links">
+        <li>
+          <a href="#" class="nav-item" data-section="friend-links" id="friendLinks">
             <span class="nav-icon">
               <i class="fa-solid fa-link text-gray-600"></i>
             </span>
             <span class="nav-text">友情連結</span>
-            <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400 group-hover:rotate-90 transition-transform"></i>
+            <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
           </a>
-          <div class="absolute left-full top-0 ml-1 hidden bg-white shadow-md rounded-md p-2 w-40">
-            <a href="https://www.gityx.com/" target="_blank" class="block py-2 px-3 text-gray-600 hover:bg-primary/10 hover:text-primary rounded-md transition-colors">
-              <i class="fa-solid fa-gamepad mr-2"></i>Git遊戲
+          <div class="submenu" id="submenuFriendLinks">
+            <a href="https://www.gityx.com/" target="_blank">
+              <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
             </a>
-            <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank" class="block py-2 px-3 text-gray-600 hover:bg-primary/10 hover:text-primary rounded-md transition-colors">
-              <i class="fa-solid fa-chart-line mr-2"></i>牛牛收益站
+            <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank">
+              <i class="fa-solid fa-chart-line mr-2 text-accent"></i>牛牛收益站
             </a>
           </div>
         </li>
@@ -389,13 +410,13 @@
             <p class="text-gray-400">為您提供MWI遊戲最佳插件體驗</p>
           </div>
           <div class="flex space-x-6">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors" title="github">
+            <a href="https://github.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="GitHub">
               <i class="fa-brands fa-github text-xl"></i>
             </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors" title="discord">
+            <a href="https://discord.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="Discord">
               <i class="fa-brands fa-discord text-xl"></i>
             </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors" title="twitter">
+            <a href="https://x.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="X (Twitter)">
               <i class="fa-brands fa-twitter text-xl"></i>
             </a>
           </div>
@@ -420,6 +441,8 @@
     const pageTitle = document.getElementById('pageTitle');
     const navItems = document.querySelectorAll('.nav-item');
     const sections = document.querySelectorAll('main > section');
+    const friendLinks = document.getElementById('friendLinks');
+    const submenuFriendLinks = document.getElementById('submenuFriendLinks');
 
     openSidebarBtn.addEventListener('click', () => {
       sidebar.classList.remove('-translate-x-full');
@@ -459,11 +482,22 @@
             });
             link.classList.add('active');
           }
+        } else {
+          // 切换展开/折叠状态
+          e.preventDefault();
+          link.classList.toggle('expanded');
         }
+        
         if (window.innerWidth < 1024) { // 僅在移動視圖下關閉
           closeSidebar();
         }
       });
+    });
+
+    // 友情链接折叠/展开功能
+    friendLinks.addEventListener('click', (e) => {
+      e.preventDefault();
+      friendLinks.classList.toggle('expanded');
     });
 
     // 滾動時添加陰影效果
