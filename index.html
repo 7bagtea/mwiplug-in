@@ -515,8 +515,7 @@
       // 切换展开状态
       friendLinks.classList.toggle('expanded');
       
-      // 保持标题不变
-      pageTitle.textContent = "MWI插件彙總";
+      // 保持标题不变（不做任何修改）
       
       // 阻止事件冒泡，防止触发侧边栏关闭
       e.stopPropagation();
@@ -528,8 +527,7 @@
         // 阻止事件冒泡到父菜单，避免关闭子菜单
         e.stopPropagation();
         
-        // 保持标题不变
-        pageTitle.textContent = "MWI插件彙總";
+        // 保持标题不变（不做任何修改）
       });
     });
 
