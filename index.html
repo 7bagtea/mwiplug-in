@@ -125,7 +125,6 @@
       background-color: #f8f9fa;
       transition: all 0.3s ease;
       position: relative;
-      cursor: pointer;
     }
 
     .nav-icon {
@@ -161,8 +160,7 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
-      padding-left: 10px;
-      margin-top: 2px;
+      padding-left: 20px;
     }
 
     .submenu a {
@@ -174,7 +172,6 @@
       text-decoration: none;
       color: #333;
       transition: all 0.2s;
-      font-size: 14px;
     }
 
     .submenu a:hover {
@@ -182,7 +179,6 @@
       transform: translateX(4px);
     }
 
-    /* 修改为子菜单展开样式 */
     .nav-item.expanded + .submenu {
       max-height: 200px;
     }
@@ -242,13 +238,13 @@
           </a>
         </li>
         <li>
-          <div class="nav-item" id="friendLinks">
+          <a href="#" class="nav-item" data-section="friend-links" id="friendLinks">
             <span class="nav-icon">
               <i class="fa-solid fa-link text-gray-600"></i>
             </span>
             <span class="nav-text">友情連結</span>
             <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
-          </div>
+          </a>
           <div class="submenu" id="submenuFriendLinks">
             <a href="https://www.gityx.com/" target="_blank">
               <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
@@ -373,7 +369,7 @@
           <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
             <h3 class="text-xl font-bold text-secondary mb-2">MWI房屋升級材料計算器</h3>
             <p class="text-gray-500 mb-3">自動計算房屋升級所需材料</p>
-            <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D%90%E6%96%99%E8%AE%A1%E7%AE%97%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
+            <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D%E6%96%99%E8%AE%A1%E7%AE%97%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -441,6 +437,7 @@
     const openSidebarBtn = document.getElementById('openSidebar');
     const closeSidebarBtn = document.getElementById('closeSidebar');
     const overlay = document.getElementById('overlay');
+    const mainContent = document.querySelector('.lg\\:ml-64');
     const pageTitle = document.getElementById('pageTitle');
     const navItems = document.querySelectorAll('.nav-item');
     const sections = document.querySelectorAll('main > section');
@@ -462,83 +459,96 @@
     closeSidebarBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
 
-    // 導航鏈接點擊事件
+    // 導航鏈接點擊事件 - 關閉側邊欄並調整滾動位置和標題
     document.querySelectorAll('#sidebar a').forEach(link => {
-      const href = link.getAttribute('href');
-      
-      if (href && href.startsWith('#')) {
-        // 普通菜单项 - 滚动到对应部分并更新标题
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = href.substring(1);
-          const targetElement = document.getElementById(targetId);
-          
-          if (targetElement) {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const scrollTop = targetElement.offsetTop - headerHeight;
-            
-            window.scrollTo({
-              top: scrollTop,
-              behavior: 'smooth'
+        const href = link.getAttribute('href');
+
+        if (href && href.startsWith('#')) {
+            // 普通菜单项 - 滚动到对应部分并更新标题
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const scrollTop = targetElement.offsetTop - headerHeight;
+
+                    window.scrollTo({
+                        top: scrollTop,
+                        behavior: 'smooth'
+                    });
+
+                    // 更新标题和活动状态
+                    pageTitle.textContent = link.querySelector('.nav-text').textContent;
+
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    link.classList.add('active');
+                }
+
+                // 关闭侧边栏（移动端）
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
             });
-            
-            // 更新标题和活动状态
-            pageTitle.textContent = link.querySelector('.nav-text').textContent;
-            
-            navItems.forEach(item => {
-              item.classList.remove('active');
-            });
-            link.classList.add('active');
-            
-            // 关闭友情链接子菜单
-            friendLinks.classList.remove('expanded');
-          }
-          
-          // 关闭侧边栏（移动端）
-          if (window.innerWidth < 1024) {
-            closeSidebar();
-          }
+        } else if (href === '#') {
+            // 有子菜单的项（如友情链接） - 只处理展开/折叠
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                link.classList.toggle('expanded');
+
+                // 更新标题为“快速导航”
+                pageTitle.textContent = "快速导航";
+              });
+        } // 其他情况（外部链接）保持默认行为
+    });
+
+    // 滾動時添加陰影效果
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.classList.add('shadow-md');
+        } else {
+            header.classList.remove('shadow-md');
+        }
+
+        // 滚动时更新导航项的活动状态
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            // 判断友情链接的子菜单是否展开
+            const isFriendLinksExpanded = friendLinks.classList.contains('expanded');
+
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight && !isFriendLinksExpanded) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-section') === sectionId) {
+                        item.classList.add('active');
+                        pageTitle.textContent = item.querySelector('.nav-text').textContent;
+                    }
+                });
+            }
         });
-      }
     });
 
-    // 友情链接菜单项点击事件
-    friendLinks.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // 切换展开状态
-      friendLinks.classList.toggle('expanded');
-      
-      // 保持标题不变
-      pageTitle.textContent = "MWI插件彙總";
-      
-      // 阻止事件冒泡，防止触发侧边栏关闭
-      e.stopPropagation();
-    });
-
-    // 友情链接子菜单的链接点击事件
+    // 友情链接子菜单的链接应该正常打开
     document.querySelectorAll('.submenu a').forEach(link => {
       link.addEventListener('click', (e) => {
-        // 阻止事件冒泡到父菜单，避免关闭子菜单
-        e.stopPropagation();
-        
-        // 保持标题不变
-        pageTitle.textContent = "MWI插件彙總";
-        
-        // 不关闭侧边栏，让用户可以继续浏览其他友情链接
+        // 不阻止默认行为，让链接正常跳转
       });
     });
 
-    // 点击侧边栏外部关闭侧边栏（但不影响友情链接子菜单）
-    document.addEventListener('click', (e) => {
-      if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
-        if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-          closeSidebar();
-        }
-      }
+    // 友情链接折叠/展开功能
+    friendLinks.addEventListener('click', (e) => {
+      e.preventDefault();
+      friendLinks.classList.toggle('expanded');
     });
 
-    // 滚动时更新导航项的活动状态
+    // 滾動時添加陰影效果
     window.addEventListener('scroll', () => {
       const header = document.querySelector('header');
       if (window.scrollY > 10) {
@@ -547,27 +557,25 @@
         header.classList.remove('shadow-md');
       }
       
-      // 只有当友情链接子菜单没有展开时才更新导航状态
-      if (!friendLinks.classList.contains('expanded')) {
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop - 100;
-          const sectionHeight = section.offsetHeight;
-          const sectionId = section.getAttribute('id');
-          
-          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-            navItems.forEach(item => {
-              item.classList.remove('active');
-              if (item.getAttribute('data-section') === sectionId) {
-                item.classList.add('active');
-                pageTitle.textContent = item.querySelector('.nav-text').textContent;
-              }
-            });
-          }
-        });
-      }
+      // 滚动时更新导航项的活动状态
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+          navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-section') === sectionId) {
+              item.classList.add('active');
+              pageTitle.textContent = item.querySelector('.nav-text').textContent;
+            }
+          });
+        }
+      });
     });
 
-    // 检测屏幕尺寸变化，调整侧边栏状态
+    // 檢測屏幕尺寸變化，調整側邊欄狀態
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 1024) {
         sidebar.classList.remove('-translate-x-full');
@@ -609,6 +617,36 @@
             document.body.removeChild(tooltip);
           }
         });
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const parentElement = document.getElementById('footer-links');
+      parentElement.addEventListener('mouseenter', function (e) {
+        if (e.target.matches('a[data-tooltip]')) {
+          const tooltipText = e.target.dataset.tooltip;
+          const tooltip = document.createElement('div');
+          // 以下设置tooltip样式和位置的代码同之前
+          tooltip.style.position = 'absolute';
+          tooltip.style.backgroundColor = '#333';
+          tooltip.style.color = 'white';
+          tooltip.style.padding = '5px 10px';
+          tooltip.style.borderRadius = '3px';
+          tooltip.style.zIndex = '100';
+          tooltip.textContent = tooltipText;
+          const rect = e.target.getBoundingClientRect();
+          tooltip.style.left = rect.left + window.pageXOffset + 'px';
+          tooltip.style.top = rect.bottom + window.pageYOffset + 'px';
+          document.body.appendChild(tooltip);
+      }
+      });
+      parentElement.addEventListener('mouseleave', function (e) {
+        if (e.target.matches('a[data-tooltip]')) {
+          const tooltip = document.querySelector('div[style*="position: absolute"]');
+          if (tooltip) {
+            document.body.removeChild(tooltip);
+          }
+        }
       });
     });
   </script>
