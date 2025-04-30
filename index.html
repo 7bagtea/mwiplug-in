@@ -461,51 +461,83 @@
 
     // 導航鏈接點擊事件 - 關閉側邊欄並調整滾動位置和標題
     document.querySelectorAll('#sidebar a').forEach(link => {
-      const href = link.getAttribute('href');
-      
-      if (href && href.startsWith('#')) {
-        // 普通菜单项 - 滚动到对应部分并更新标题
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = href.substring(1);
-          const targetElement = document.getElementById(targetId);
-          
-          if (targetElement) {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const scrollTop = targetElement.offsetTop - headerHeight;
-            
-            window.scrollTo({
-              top: scrollTop,
-              behavior: 'smooth'
+        const href = link.getAttribute('href');
+
+        if (href && href.startsWith('#')) {
+            // 普通菜单项 - 滚动到对应部分并更新标题
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const scrollTop = targetElement.offsetTop - headerHeight;
+
+                    window.scrollTo({
+                        top: scrollTop,
+                        behavior: 'smooth'
+                    });
+
+                    // 更新标题和活动状态
+                    pageTitle.textContent = link.querySelector('.nav-text').textContent;
+
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    link.classList.add('active');
+                }
+
+                // 关闭侧边栏（移动端）
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
             });
-            
-            // 更新标题和活动状态
-            pageTitle.textContent = link.querySelector('.nav-text').textContent;
-            
-            navItems.forEach(item => {
-              item.classList.remove('active');
+        } else if (href === '#') {
+            // 有子菜单的项（如友情链接） - 只处理展开/折叠
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                link.classList.toggle('expanded');
+
+                // 更新标题为“快速导航”
+                pageTitle.textContent = "快速导航";
+
+                // 关闭侧边栏（移动端）
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
             });
-            link.classList.add('active');
-          }
-          
-          // 关闭侧边栏（移动端）
-          if (window.innerWidth < 1024) {
-            closeSidebar();
-          }
+        } // 其他情况（外部链接）保持默认行为
+    });
+
+    // 滾動時添加陰影效果
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.classList.add('shadow-md');
+        } else {
+            header.classList.remove('shadow-md');
+        }
+
+        // 滚动时更新导航项的活动状态
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            // 判断友情链接的子菜单是否展开
+            const isFriendLinksExpanded = friendLinks.classList.contains('expanded');
+
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight && !isFriendLinksExpanded) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-section') === sectionId) {
+                        item.classList.add('active');
+                        pageTitle.textContent = item.querySelector('.nav-text').textContent;
+                    }
+                });
+            }
         });
-      } else if (href === '#') {
-        // 有子菜单的项（如友情链接） - 只处理展开/折叠
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          link.classList.toggle('expanded');
-          
-          // 不更新标题，避免影响右侧内容
-          // 关闭侧边栏（移动端）
-          if (window.innerWidth < 1024) {
-            closeSidebar();
-          }
-        });
-      } // 其他情况（外部链接）保持默认行为
     });
 
     // 友情链接子菜单的链接应该正常打开
@@ -594,4 +626,4 @@
     });
   </script>
 </body>
-</html>
+</html
