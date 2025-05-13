@@ -103,10 +103,6 @@
       transition: width 1s ease;
     }
 
-    footer a:hover::after {
-      width: 100%;
-    }
-
     footer p.text-gray-500 {
       color: #ccc;
       text-align: center;
@@ -346,7 +342,7 @@
           <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
             <h3 class="text-xl font-bold text-accent mb-2">物品價格走勢</h3>
             <p class="text-gray-500 mb-3">內置價格走勢</p>
-            <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%9B%E5%95%86%E5%9F%8E%E4%B8%AD%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+            <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
@@ -475,7 +471,10 @@
     const sections = document.querySelectorAll('main > section');
     const friendLinks = document.getElementById('friendLinks');
     const submenuFriendLinks = document.getElementById('submenuFriendLinks');
-
+    
+    // 新增：控制滾動事件的標記
+    let isNavigating = false;
+    
     openSidebarBtn.addEventListener('click', () => {
       sidebar.classList.remove('-translate-x-full');
       overlay.classList.remove('hidden');
@@ -491,7 +490,7 @@
     closeSidebarBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
 
-    // 導航鏈接點擊事件 - 直接精準更新標題
+    // 導航鏈接點擊事件
     document.querySelectorAll('#sidebar a').forEach(link => {
       const href = link.getAttribute('href');
       
@@ -499,12 +498,16 @@
         link.addEventListener('click', (e) => {
           e.preventDefault();
           
-          // 立即直接更新標題（排除友情鏈接）
+          // 更新頁面標題
           if (!link.closest('#friendLinks')) {
             const navText = link.querySelector('.nav-text').textContent;
             pageTitle.textContent = navText;
           }
 
+          // 新增：設置導航中標記
+          isNavigating = true;
+          
+          // 滾動到目標區域
           const targetId = href.substring(1);
           const targetElement = document.getElementById(targetId);
           
@@ -517,15 +520,22 @@
               behavior: 'smooth'
             });
 
-            // 更新導航項狀態
-            navItems.forEach(item => {
+            // 更新導航項狀態 - 移除所有活動狀態
+            document.querySelectorAll('.nav-item').forEach(item => {
               item.classList.remove('active');
             });
+            
+            // 為點擊的導航項添加活動狀態
             link.classList.add('active');
             
             // 關閉友情鏈接子菜單
             friendLinks.classList.remove('expanded');
           }
+          
+          // 新增：300ms後重置導航中標記（等待滾動完成）
+          setTimeout(() => {
+            isNavigating = false;
+          }, 300);
           
           // 關閉側邊欄（移動端）
           if (window.innerWidth < 1024) {
@@ -542,8 +552,6 @@
       // 切換展開狀態
       friendLinks.classList.toggle('expanded');
       
-      // 保持標題不變（不做任何修改）
-      
       // 阻止事件冒泡，防止觸發側邊欄關閉
       e.stopPropagation();
     });
@@ -553,8 +561,6 @@
       link.addEventListener('click', (e) => {
         // 阻止事件冒泡到父菜單，避免關閉子菜單
         e.stopPropagation();
-        
-        // 保持標題不變（不做任何修改）
       });
     });
 
@@ -567,7 +573,7 @@
       }
     });
 
-    // 滾動時僅更新導航項狀態，不乾擾標題
+    // 滾動時更新導航項狀態
     window.addEventListener('scroll', () => {
       const header = document.querySelector('header');
       if (window.scrollY > 10) {
@@ -576,34 +582,39 @@
         header.classList.remove('shadow-md');
       }
       
-      // 只有當友情鏈接子菜單沒有展開時才更新導航狀態
-      if (!friendLinks.classList.contains('expanded')) {
-        let currentSection = null;
-        let closestDistance = Infinity;
-        
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop - 100;
-          const sectionHeight = section.offsetHeight;
-          const distance = Math.abs(window.scrollY - sectionTop);
+      // 新增：只有不在導航期間才更新導航項狀態
+      if (!isNavigating) {
+        // 只有當友情鏈接子菜單沒有展開時才更新導航狀態
+        if (!friendLinks.classList.contains('expanded')) {
+          let currentSection = null;
+          let closestDistance = Infinity;
           
-          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-            currentSection = section;
-          } else if (distance < closestDistance) {
-            closestDistance = distance;
-            currentSection = section;
-          }
-        });
-        
-        if (currentSection) {
-          const sectionId = currentSection.getAttribute('id');
-          const targetNavItem = document.querySelector(`[data-section="${sectionId}"]`);
-          
-          navItems.forEach(item => {
-            item.classList.remove('active');
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const distance = Math.abs(window.scrollY - sectionTop);
+            
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+              currentSection = section;
+            } else if (distance < closestDistance) {
+              closestDistance = distance;
+              currentSection = section;
+            }
           });
           
-          if (targetNavItem) {
-            targetNavItem.classList.add('active');
+          if (currentSection) {
+            const sectionId = currentSection.getAttribute('id');
+            const targetNavItem = document.querySelector(`[data-section="${sectionId}"]`);
+            
+            // 移除所有導航項的活動狀態
+            document.querySelectorAll('.nav-item').forEach(item => {
+              item.classList.remove('active');
+            });
+            
+            // 為當前可見區域的導航項添加活動狀態
+            if (targetNavItem) {
+              targetNavItem.classList.add('active');
+            }
           }
         }
       }
