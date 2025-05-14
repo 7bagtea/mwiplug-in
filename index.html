@@ -198,9 +198,11 @@
 
 <body class="bg-light text-dark smooth-scroll">
   <!-- 側邊欄 -->
-  <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
+<div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
     <div class="p-4 flex justify-between items-center border-b">
-      <h2 class="text-xl font-bold text-primary">快速導航</h2>
+      <h2 class="text-xl font-bold text-primary">
+        <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;"></i>快速導航
+      </h2>
       <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
         <i class="fa-solid fa-times"></i>
       </button>
@@ -412,8 +414,16 @@
           </div>
 
           <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-secondary mb-2">MWI-Hit-Tracker-Canvas</h3>
+            <p class="text-gray-500 mb-3">註1:戰鬥特效,(註1、註2擇一下載)</p>
+            <a href="https://greasyfork.org/en/scripts/535422-mwi-hit-tracker-canvas" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>          
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
             <h3 class="text-xl font-bold text-secondary mb-2">MWI-Hit-Tracker</h3>
-            <p class="text-gray-500 mb-3">戰鬥特效</p>
+            <p class="text-gray-500 mb-3">註2:戰鬥特效,(註1、註2擇一下載)</p>
             <a href="https://greasyfork.org/zh-CN/scripts/535181-mwi-hit-tracker" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
@@ -467,160 +477,125 @@
     const closeSidebarBtn = document.getElementById('closeSidebar');
     const overlay = document.getElementById('overlay');
     const pageTitle = document.getElementById('pageTitle');
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = document.querySelectorAll('main > section');
     const friendLinks = document.getElementById('friendLinks');
     const submenuFriendLinks = document.getElementById('submenuFriendLinks');
-    
-    // 新增：控制滾動事件的標記
-    let isNavigating = false;
-    
-    openSidebarBtn.addEventListener('click', () => {
-      sidebar.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      // 设置主导航项点击事件
+      document.querySelectorAll('#sidebar > nav > ul > li > a').forEach(link => {
+        link.addEventListener('click', handleNavClick);
+      });
+
+      // 设置友情链接菜单展开/折叠
+      friendLinks.addEventListener('click', (e) => {
+        e.preventDefault();
+        friendLinks.classList.toggle('expanded');
+        
+        // 设置友情链接标题为活跃状态
+        setActiveNav(friendLinks);
+      });
+
+      // 设置子菜单导航项点击事件
+      document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
+        link.addEventListener('click', handleSubmenuClick);
+      });
+
+      // 初始化第一个主导航项为活跃状态
+      const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
+      if (firstNavItem) {
+        setActiveNav(firstNavItem);
+      }
     });
 
+    // 处理导航项点击
+    function handleNavClick(e) {
+      e.preventDefault();
+      
+      const link = e.currentTarget;
+      const targetId = link.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // 更新页面标题
+        const navText = link.querySelector('.nav-text').textContent;
+        pageTitle.textContent = navText;
+        
+        // 滚动到目标区域
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const scrollTop = targetElement.offsetTop - headerHeight;
+        
+        window.scrollTo({
+          top: scrollTop,
+          behavior: 'smooth'
+        });
+        
+        // 设置点击的导航项为活跃状态
+        setActiveNav(link);
+        
+        // 关闭友情链接子菜单
+        friendLinks.classList.remove('expanded');
+      }
+      
+      // 关闭侧边栏（移动端）
+      if (window.innerWidth < 1024) {
+        closeSidebar();
+      }
+    }
+
+    // 处理子菜单导航项点击
+    function handleSubmenuClick(e) {
+      e.preventDefault();
+      
+      const link = e.currentTarget;
+      
+      // 更新页面标题
+      const navText = link.textContent.trim();
+      pageTitle.textContent = navText;
+      
+      // 设置子菜单导航项为活跃状态
+      setActiveNav(link);
+      
+      // 展开友情链接菜单
+      friendLinks.classList.add('expanded');
+      
+      // 获取链接的href属性并导航
+      const targetUrl = link.getAttribute('href');
+      if (targetUrl && targetUrl !== '#') {
+        window.open(targetUrl, '_blank'); // 在新窗口打开链接
+      }
+      
+      // 阻止事件冒泡
+      e.stopPropagation();
+      
+      // 关闭侧边栏（移动端）
+      if (window.innerWidth < 1024) {
+        closeSidebar();
+      }
+    }
+
+    // 设置导航项活跃状态
+    function setActiveNav(activeElement) {
+      // 移除所有导航项的活跃状态
+      document.querySelectorAll('#sidebar .nav-item.active, #sidebar > nav > ul > li > a.active, #friendLinks.active').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.querySelectorAll('#submenuFriendLinks a.active').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 为当前导航项添加活跃状态
+      activeElement.classList.add('active');
+    }
+
+    // 关闭侧边栏
     function closeSidebar() {
       sidebar.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
     }
 
-    closeSidebarBtn.addEventListener('click', closeSidebar);
-    overlay.addEventListener('click', closeSidebar);
-
-    // 導航鏈接點擊事件
-    document.querySelectorAll('#sidebar a').forEach(link => {
-      const href = link.getAttribute('href');
-      
-      if (href && href.startsWith('#')) {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          // 更新頁面標題
-          if (!link.closest('#friendLinks')) {
-            const navText = link.querySelector('.nav-text').textContent;
-            pageTitle.textContent = navText;
-          }
-
-          // 新增：設置導航中標記
-          isNavigating = true;
-          
-          // 滾動到目標區域
-          const targetId = href.substring(1);
-          const targetElement = document.getElementById(targetId);
-          
-          if (targetElement) {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const scrollTop = targetElement.offsetTop - headerHeight;
-            
-            window.scrollTo({
-              top: scrollTop,
-              behavior: 'smooth'
-            });
-
-            // 更新導航項狀態 - 移除所有活動狀態
-            document.querySelectorAll('.nav-item').forEach(item => {
-              item.classList.remove('active');
-            });
-            
-            // 為點擊的導航項添加活動狀態
-            link.classList.add('active');
-            
-            // 關閉友情鏈接子菜單
-            friendLinks.classList.remove('expanded');
-          }
-          
-          // 新增：300ms後重置導航中標記（等待滾動完成）
-          setTimeout(() => {
-            isNavigating = false;
-          }, 300);
-          
-          // 關閉側邊欄（移動端）
-          if (window.innerWidth < 1024) {
-            closeSidebar();
-          }
-        });
-      }
-    });
-
-    // 友情鏈接菜單項點擊事件
-    friendLinks.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // 切換展開狀態
-      friendLinks.classList.toggle('expanded');
-      
-      // 阻止事件冒泡，防止觸發側邊欄關閉
-      e.stopPropagation();
-    });
-
-    // 友情鏈接子菜單的鏈接點擊事件
-    document.querySelectorAll('.submenu a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        // 阻止事件冒泡到父菜單，避免關閉子菜單
-        e.stopPropagation();
-      });
-    });
-
-    // 點擊側邊欄外部關閉側邊欄
-    document.addEventListener('click', (e) => {
-      if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
-        if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-          closeSidebar();
-        }
-      }
-    });
-
-    // 滾動時更新導航項狀態
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 10) {
-        header.classList.add('shadow-md');
-      } else {
-        header.classList.remove('shadow-md');
-      }
-      
-      // 新增：只有不在導航期間才更新導航項狀態
-      if (!isNavigating) {
-        // 只有當友情鏈接子菜單沒有展開時才更新導航狀態
-        if (!friendLinks.classList.contains('expanded')) {
-          let currentSection = null;
-          let closestDistance = Infinity;
-          
-          sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.offsetHeight;
-            const distance = Math.abs(window.scrollY - sectionTop);
-            
-            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-              currentSection = section;
-            } else if (distance < closestDistance) {
-              closestDistance = distance;
-              currentSection = section;
-            }
-          });
-          
-          if (currentSection) {
-            const sectionId = currentSection.getAttribute('id');
-            const targetNavItem = document.querySelector(`[data-section="${sectionId}"]`);
-            
-            // 移除所有導航項的活動狀態
-            document.querySelectorAll('.nav-item').forEach(item => {
-              item.classList.remove('active');
-            });
-            
-            // 為當前可見區域的導航項添加活動狀態
-            if (targetNavItem) {
-              targetNavItem.classList.add('active');
-            }
-          }
-        }
-      }
-    });
-
-    // 檢測屏幕尺寸變化，調整側邊欄狀態
+    // 检测屏幕尺寸变化，调整侧边栏状态
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 1024) {
         sidebar.classList.remove('-translate-x-full');
@@ -632,38 +607,25 @@
       }
     });
 
-    // 初始化顯示第一個導航項為活動狀態
-    if (navItems.length > 0) {
-      navItems[0].classList.add('active');
-    }
-
-    // 提示框功能
-    document.addEventListener('DOMContentLoaded', function () {
-      const links = document.querySelectorAll('a[data-tooltip]');
-      links.forEach(link => {
-        link.addEventListener('mouseenter', function (e) {
-          const tooltipText = this.dataset.tooltip;
-          const tooltip = document.createElement('div');
-          tooltip.style.position = 'absolute';
-          tooltip.style.backgroundColor = '#333';
-          tooltip.style.color = 'white';
-          tooltip.style.padding = '5px 10px';
-          tooltip.style.borderRadius = '3px';
-          tooltip.style.zIndex = '100';
-          tooltip.textContent = tooltipText;
-          const rect = this.getBoundingClientRect();
-          tooltip.style.left = rect.left + window.pageXOffset + 'px';
-          tooltip.style.top = rect.bottom + window.pageYOffset + 'px';
-          document.body.appendChild(tooltip);
-        });
-        link.addEventListener('mouseleave', function () {
-          const tooltip = document.querySelector('div[style*="position: absolute"]');
-          if (tooltip) {
-            document.body.removeChild(tooltip);
-          }
-        });
-      });
+    // 点击侧边栏外部关闭侧边栏
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
+        if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+          closeSidebar();
+        }
+      }
     });
-  </script>
-</body>
+
+    // 打开侧边栏
+    openSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.remove('-translate-x-full');
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // 关闭侧边栏
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    </script>
+  </body>
 </html>
