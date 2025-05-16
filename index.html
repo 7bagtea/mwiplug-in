@@ -9,6 +9,10 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <!-- 引用ICO格式圖標 -->
   <link rel="shortcut icon" href="favicon_io/favicon.ico" type="image/x-icon">
+    <!-- 引用快速導航特殊字體 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -196,13 +200,11 @@
       transform: rotate(90deg);
     }
 
-    @font-face {
-      font-family: 'Rampart One'; /* 字体名称，可自定义 */
-      src: url('assets/fonts/RampartOne-Regular.ttf') format('truetype'); /* 字体文件路径 */
-      font-weight: normal;
-      font-style: normal;
-    }
-
+.rampart-one-regular {
+  font-family: "Rampart One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
     
   </style>
 </head>
