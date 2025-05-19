@@ -10,9 +10,9 @@
     <!-- 引用ICO格式圖標 -->
   <link rel="shortcut icon" href="favicon_io/favicon.ico" type="image/x-icon">
     <!-- 引用快速導航特殊字體 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -200,12 +200,22 @@
       transform: rotate(90deg);
     }
 
-.rampart-one-regular {
-  font-family: "Rampart One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
+    .rampart-one-regular {
+      font-family: "Rampart One", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
     
+    /* 訪問地址 */
+    .fa-link {
+      opacity: 0.4; /* 使用 0-1 之间的值，不需要 px */
+      transition: opacity 1s ease; /* 添加过渡效果 */
+    }
+
+    /* 鼠标悬停时增加图标透明度 */
+    .fa-link:hover {
+      opacity: 1;
+    }
 
   </style>
 </head>
@@ -266,7 +276,7 @@
         <li>
           <a href="#battle-effects" class="nav-item" data-section="battle-effects">
             <span class="nav-icon">
-            <i class="fas fa-shield-alt" style="color: #EF4444;"></i>
+            <i class="fa-solid fa-shield" style="color: #EF4444;"></i>
             </span>
             <span class="nav-text">戰鬥與特效</span>
           </a>
@@ -446,7 +456,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-            <h3 class="text-xl font-bold mb-2" style="color: #bf9004;">mooket</h3>
+            <h3 class="text-xl font-bold text-yellow-500 mb-2">mooket</h3>
             <p class="text-gray-500 mb-3">銀河奶牛歷史價格,（包含強化物品）</p>
             <a href="https://greasyfork.org/zh-TW/scripts/530316-mooket" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
@@ -454,7 +464,7 @@
           </div>
 
           <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-            <h3 class="text-xl font-bold mb-2" style="color: #bf9004;">MWI Alchemy Calc</h3>
+            <h3 class="text-xl font-bold text-yellow-500 mb-2">MWIAlchemyCalc</h3>
             <p class="text-gray-500 mb-3">顯示煉金收益和產出統計,需安裝mooket</p>
             <a href="https://greasyfork.org/zh-TW/scripts/530757-mwialchemycalc" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
               <i class="fa-solid fa-link mr-2"></i>訪問地址
