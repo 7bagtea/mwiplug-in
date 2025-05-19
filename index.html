@@ -98,6 +98,7 @@
       text-decoration: none;
     }
 
+    /* 頁腳3個連結美化樣式 */
     footer a::after {
       content: "";
       position: absolute;
@@ -109,6 +110,11 @@
       transition: width 1s ease;
     }
 
+    /* 3連結讀秒 */
+    footer a:hover::after {
+      width: 100%;
+    }
+    
     footer p.text-gray-500 {
       color: #ccc;
       text-align: center;
