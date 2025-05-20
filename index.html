@@ -4,10 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="七包茶">
-  <meta name="description" content="milky,idle,銀河奶牛,銀河牛牛">
   <title>MWI插件彙總</title>
-    <!-- 導入CSS : tailwindcss -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <!-- 引用ICO格式圖標 -->
@@ -101,6 +98,7 @@
       text-decoration: none;
     }
 
+    /* 頁腳3個連結美化樣式 */
     footer a::after {
       content: "";
       position: absolute;
@@ -109,13 +107,14 @@
       width: 0;
       height: 2px;
       background-color: white;
-      transition: width 1s ease;
+      transition: width 1.5s ease;
     }
 
+    /* 3連結讀秒 */
     footer a:hover::after {
-      width: 100%; /* 鼠标悬停时下划线宽度从0变为100% */
+      width: 100%;
     }
-
+    
     footer p.text-gray-500 {
       color: #ccc;
       text-align: center;
@@ -207,542 +206,530 @@
       transform: rotate(90deg);
     }
 
-    /* 快速導航的特殊字體 */
     .rampart-one-regular {
       font-family: "Rampart One", sans-serif;
       font-weight: 400;
       font-style: normal;
     }
     
-    /* 增加頁面高度,讓趣味與輔助標題正確置頂 */
-    .pp-5 {
-    padding-bottom:5rem !important;
+    /* 訪問地址 */
+    .fa-link {
+      opacity: 0.4; /* 使用 0-1 之间的值，不需要 px */
+      transition: opacity 1s ease; /* 添加过渡效果 */
+    }
+
+    /* 鼠标悬停时增加图标透明度 */
+    .fa-link:hover {
+      opacity: 1;
     }
 
   </style>
 </head>
 
- <body class="bg-light text-dark smooth-scroll">
-    <!-- 側邊欄 -->
-    <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
-      <div class="p-4 flex justify-between items-center border-b">
-        <h2 class="text-xl font-bold text-primary mx-auto" style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 29px; border-radius: 8px;">
-          <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;font-size: 24px;"></i>快速導航
-        </h2>
-        <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
-          <i class="fa-solid fa-times"></i>
+<body class="bg-light text-dark smooth-scroll">
+  <!-- 側邊欄 -->
+<div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
+    <div class="p-4 flex justify-between items-center border-b">
+      <h2 class="text-xl font-bold text-primary mx-auto" style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 29px; border-radius: 8px;">
+        <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;font-size: 24px;"></i>快速導航
+      </h2>
+      <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+    <nav class="py-4">
+      <ul class="space-y-1 px-4">
+        <li>
+          <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
+            <span class="nav-icon">
+              <i class="fa-solid fa-sitemap text-primary"></i>
+            </span>
+            <span class="nav-text">MWI插件彙總</span>
+          </a>
+        </li>
+        <li>
+          <a href="#must-have" class="nav-item" data-section="must-have">
+            <span class="nav-icon">
+              <i class="fa-solid fa-star text-yellow-500"></i>
+            </span>
+            <span class="nav-text">必裝系列</span>
+          </a>
+        </li>
+        <li>
+          <a href="#highly-recommended" class="nav-item" data-section="highly-recommended">
+            <span class="nav-icon">
+              <i class="fa-solid fa-fire text-accent"></i>
+            </span>
+            <span class="nav-text">強烈推薦</span>
+          </a>
+        </li>
+        <li>
+          <a href="#tools-statistics" class="nav-item" data-section="tools-statistics">
+            <span class="nav-icon">
+              <i class="fa-solid fa-wrench text-blue-500"></i>
+            </span>
+            <span class="nav-text">工具與統計</span>
+          </a>
+        </li>
+        <li>
+          <a href="#economic-trade" class="nav-item" data-section="economic-trade">
+            <span class="nav-icon">
+              <i class="fa-solid fa-coins text-yellow-500"></i>
+            </span>
+            <span class="nav-text">經濟與交易</span>
+          </a>
+        </li>
+        <li>
+          <a href="#battle-effects" class="nav-item" data-section="battle-effects">
+            <span class="nav-icon">
+            <i class="fas fa-shield-alt" style="color: #EF4444;"></i>
+            </span>
+            <span class="nav-text">戰鬥與特效</span>
+          </a>
+        </li>
+        <li>
+          <a href="#fun-utils" class="nav-item" data-section="fun-utils">
+            <span class="nav-icon">
+              <i class="fa-solid fa-smile text-green-500"></i>
+            </span>
+            <span class="nav-text">趣味與輔助</span>
+          </a>
+        </li>
+        <li>
+          <div class="nav-item" id="friendLinks">
+            <span class="nav-icon">
+              <i class="fa-solid fa-link text-gray-600"></i>
+            </span>
+            <span class="nav-text">友情連結</span>
+            <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
+          </div>
+          <div class="submenu" id="submenuFriendLinks">
+            <a href="https://www.gityx.com/" target="_blank" title="Git遊戲官方網站">
+              <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
+            </a>
+            <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank" title="牛牛收益站數據面板">
+              <i class="fa-solid fa-chart-line mr-2 text-accent"></i>牛牛收益站
+            </a>
+            <a href="https://sporkslinger.github.io/market-tracker-mwi/#/dashboard" target="_blank" title="牛牛股市行情跟蹤">
+              <i class="fa-solid fa-sack-dollar mr-2 text-yellow-500"></i>牛牛股市
+            </a>
+            <a href="https://www.torn.com/2719800" target="_blank" title="辣雞薇的Torn City個人頁面">
+              <i class="fa-solid fa-paw mr-2" style="color: #6843d6;"></i>辣雞薇
+            </a>
+          </div>
+        </li>
+         <br>
+        <!-- 鼠标悬停时文字变红、加粗 -->
+        <li style="font-size: 18px; color: black;"
+            onmouseover="this.style.color='red'; this.style.fontWeight='bold'"
+            onmouseout="this.style.color='black'; this.style.fontWeight='normal'">
+            迫於辣雞薇的脅迫,只好加上了她的Torn City連結
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 主內容 -->
+  <div class="lg:ml-64 min-h-screen transition-all duration-300">
+    <!-- 頂部導航欄 -->
+    <header class="sticky top-0 bg-white shadow-sm z-20">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <button id="openSidebar" class="lg:hidden text-dark hover:text-primary transition-colors">
+          <i class="fa-solid fa-bars text-xl"></i>
         </button>
+        <h1 id="pageTitle" class="text-2xl font-bold text-primary title-transition">MWI插件彙總</h1>
       </div>
-      <nav class="py-4">
-        <ul class="space-y-1 px-4">
-          <li>
-            <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
-              <span class="nav-icon">
-                <i class="fa-solid fa-sitemap text-primary"></i>
-              </span>
-              <span class="nav-text">MWI插件彙總</span>
-            </a>
-          </li>
-          <li>
-            <a href="#must-have" class="nav-item" data-section="must-have">
-              <span class="nav-icon">
-                <i class="fa-solid fa-star text-yellow-500"></i>
-              </span>
-              <span class="nav-text">必裝系列</span>
-            </a>
-          </li>
-          <li>
-            <a href="#highly-recommended" class="nav-item" data-section="highly-recommended">
-              <span class="nav-icon">
-                <i class="fa-solid fa-fire text-accent"></i>
-              </span>
-              <span class="nav-text">強烈推薦</span>
-            </a>
-          </li>
-          <li>
-            <a href="#tools-statistics" class="nav-item" data-section="tools-statistics">
-              <span class="nav-icon">
-                <i class="fa-solid fa-wrench text-blue-500"></i>
-              </span>
-              <span class="nav-text">工具與統計</span>
-            </a>
-          </li>
-          <li>
-            <a href="#economic-trade" class="nav-item" data-section="economic-trade">
-              <span class="nav-icon">
-                <i class="fa-solid fa-coins text-yellow-500"></i>
-              </span>
-              <span class="nav-text">經濟與交易</span>
-            </a>
-          </li>
-          <li>
-            <a href="#battle-effects" class="nav-item" data-section="battle-effects">
-              <span class="nav-icon">
-              <i class="fa-solid fa-shield" style="color: #EF4444;"></i>
-              </span>
-              <span class="nav-text">戰鬥與特效</span>
-            </a>
-          </li>
-          <li>
-            <a href="#fun-utils" class="nav-item" data-section="fun-utils">
-              <span class="nav-icon">
-                <i class="fa-solid fa-smile text-green-500"></i>
-              </span>
-              <span class="nav-text">趣味與輔助</span>
-            </a>
-          </li>
-          <li>
-            <div class="nav-item" id="friendLinks">
-              <span class="nav-icon">
-                <i class="fa-solid fa-link text-gray-600"></i>
-              </span>
-              <span class="nav-text">友情連結</span>
-              <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
-            </div>
-            <div class="submenu" id="submenuFriendLinks">
-              <a href="https://www.gityx.com/" target="_blank">
-                <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
-              </a>
-              <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank">
-                <i class="fa-solid fa-chart-line mr-2 text-accent"></i>牛牛收益站
-              </a>
-              <a href="https://sporkslinger.github.io/market-tracker-mwi/#/dashboard" target="_blank">
-                <i class="fa-solid fa-sack-dollar mr-2 text-yellow-500"></i>牛牛股市
-              </a>
-              <a href="https://www.torn.com/2719800" target="_blank">
-                <i class="fa-solid fa-paw mr-2" style="color: #6843d6;"></i>辣雞薇
-              </a>
-            </div>
-          </li>
-          <br>
-          <li>迫於辣雞薇的脅迫,只好加上了她的Torn City連結</li>
-        </ul>
-      </nav>
-    </div>
+    </header>
 
-    <!-- 主內容 -->
-    <div class="lg:ml-64 min-h-screen transition-all duration-300">
-      <!-- 頂部導航欄 -->
-      <header class="sticky top-0 bg-white shadow-sm z-20">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-          <button id="openSidebar" class="lg:hidden text-dark hover:text-primary transition-colors">
-            <i class="fa-solid fa-bars text-xl"></i>
-          </button>
-          <h1 id="pageTitle" class="text-2xl font-bold text-primary title-transition">MWI插件彙總</h1>
+    <!-- 主要內容區域 -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- 插件匯總介紹 -->
+      <section id="mw-summary" class="mb-12">
+        <div class="bg-gradient-to-r from-primary to-primary/70 text-white rounded-xl p-6 shadow-lg">
+          <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">MWI插件彙總</h2>
+          <p class="text-lg">本頁面收集了MWI遊戲中各類實用插件，幫助您提升遊戲體驗。點擊左側導航可快速查看不同類別的插件。</p>
         </div>
-      </header>
+      </section>
 
-      <!-- 主要內容區域 -->
-      <main class="container mx-auto px-4 py-8 pp-5">
-        <!-- 插件匯總介紹 -->
-        <section id="mw-summary" class="mb-12">
-          <div class="bg-gradient-to-r from-primary to-primary/70 text-white rounded-xl p-6 shadow-lg">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">MWI插件彙總</h2>
-            <p class="text-lg">本頁面收集了MWI遊戲中各類實用插件，幫助您提升遊戲體驗。點擊左側導航可快速查看不同類別的插件。</p>
+      <!-- 必裝系列 -->
+      <section id="must-have" class="mb-12">
+        <div class="border-b-2 border-primary mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-primary">必裝系列</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-primary mb-2">Tampermonkey-油猴</h3>
+            <p class="text-gray-500 mb-3">網頁版裝插件必須裝這個</p>
+            <a href="https://www.tampermonkey.net/index.php?locale=zh" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
           </div>
-        </section>
 
-        <!-- 必裝系列 -->
-        <section id="must-have" class="mb-12">
-          <div class="border-b-2 border-primary mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-primary">必裝系列</h2>
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-primary mb-2">MWITools</h3>
+            <p class="text-gray-500 mb-3">基礎功能增強，遊戲體驗優化</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/494467-mwitools" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-primary mb-2">Tampermonkey-油猴</h3>
-              <p class="text-gray-500 mb-3">網頁版裝插件必須裝這個</p>
-              <a href="https://www.tampermonkey.net/index.php?locale=zh" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
 
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-primary mb-2">MWITools</h3>
-              <p class="text-gray-500 mb-3">基礎功能增強，遊戲體驗優化</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/494467-mwitools" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-primary mb-2">Steam版本相容性插件</h3>
-              <p class="text-gray-500 mb-3">Steam版本安裝MWItools前置條件</p>
-              <a href="https://greasyfork.org/en/scripts/497410-mwitools-addon-for-steam-version" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <!-- 強烈推薦 -->
-        <section id="highly-recommended" class="mb-12">
-          <div class="border-b-2 border-accent mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">強烈推薦</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-accent mb-2">食用工具</h3>
-              <p class="text-gray-500 mb-3">開箱記錄、箱子期望、離線統計、公會釘釘、出警隊友</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/499963-%E9%93%B6%E6%B2%B3%E5%A5%B6%E7%89%9B-%E9%A3%9F%E7%94%A8%E5%B7%A5%E5%85%B7" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-accent mb-2">MWI TaskManager</h3>
-              <p class="text-gray-500 mb-3">任務界面美化與排序優化</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/509720-mwi-taskmanager" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-accent mb-2">物品價格走勢</h3>
-              <p class="text-gray-500 mb-3">內置價格走勢</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-accent mb-2">Ranged Way Idle</h3>
-              <p class="text-gray-500 mb-3">Magic Way Idle改</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/535671-ranged-way-idle" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-accent mb-2">MWI QQShow</h3>
-              <p class="text-gray-500 mb-3">戰鬥小人頭像</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/535371-mwi-qqshow" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <!-- 工具與統計 -->
-        <section id="tools-statistics" class="mb-12">
-          <div class="border-b-2 border-accent mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">工具與統計</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-secondary mb-2">在線強化統計</h3>
-              <p class="text-gray-500 mb-3">強化概率統計</p>
-              <a href="https://greasyfork.org/zh-CN/scripts/531872-mwi-ultimate-enhancement-tracker-v3-7-3" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-secondary mb-2">MWI房屋升級材料計算器</h3>
-              <p class="text-gray-500 mb-3">自動計算房屋升級所需材料</p>
-              <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D%90%E6%96%99%E8%AE%A1%E7%AE%97%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-secondary mb-2">庫存分類價格匯總顯示</h3>
-              <p class="text-gray-500 mb-3">顯示每個庫存價格</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/535455-%E9%93%B6%E6%B2%B3%E5%A5%B6%E7%89%9B-%E5%BA%93%E5%AD%98%E5%88%86%E7%B1%BB%E4%BB%B7%E6%A0%BC%E6%B1%87%E6%80%BB%E6%98%BE%E7%A4%BA" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>  
-        </section> 
-
-        <!-- 經濟與交易 -->
-        <section id="economic-trade" class="mb-12">
-          <div class="border-b-2 border-accent mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">經濟與交易</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-yellow-500 mb-2">mooket</h3>
-              <p class="text-gray-500 mb-3">銀河奶牛歷史價格,（包含強化物品）</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/530316-mooket" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-yellow-500 mb-2">MWI Alchemy Calc</h3>
-              <p class="text-gray-500 mb-3">顯示煉金收益和產出統計,需安裝mooket</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/530757-mwialchemycalc" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>  
-        </section>
-
-        <!-- 戰鬥與特效 -->
-        <section id="battle-effects" class="mb-12">
-          <div class="border-b-2 border-accent mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">戰鬥與特效</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-red-500 mb-2">MWI-Hit-Tracker-Canvas</h3>
-              <p class="text-gray-500 mb-3">註1:戰鬥特效,（註1、註2擇一下載）</p>
-              <a href="https://greasyfork.org/en/scripts/535422-mwi-hit-tracker-canvas" target="_blank" class="inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-red-500 mb-2">MWI-Hit-Tracker</h3>
-              <p class="text-gray-500 mb-3">註2:戰鬥特效,（註1、註2擇一下載）</p>
-              <a href="https://greasyfork.org/zh-CN/scripts/535181-mwi-hit-tracker" target="_blank" class="inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-red-500 mb-2">MWI HBuilderX green color</h3>
-              <p class="text-gray-500 mb-3">上班摸魚</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/535360-mwi-hbuilderx-green-color" target="_blank" class="inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>  
-        </section>
-
-        <!-- 趣味與輔助-->
-        <section id="fun-utils" class="mb-12">
-          <div class="border-b-2 border-accent mb-6">
-            <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">趣味與輔助</h2>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-green-500 mb-2">Better MWI Chat</h3>
-              <p class="text-gray-500 mb-3">Make Chat Great Again!</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/535848-better-mwi-chat" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-green-500 mb-2">好友助手</h3>
-              <p class="text-gray-500 mb-3">為MWI遊戲的好友頁面添加分組和備註功能</p>
-              <a href="https://greasyfork.cc/zh-CN/scripts/530646-mwi-%E5%A5%BD%E5%8F%8B%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-            
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-green-500 mb-2">牛牛+1</h3>
-              <p class="text-gray-500 mb-3">這很重要,所以要說3次</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/531919-%E9%93%B6%E6%B2%B3%E5%A4%8D%E8%AF%BB%E6%94%BE%E7%BD%AE-1%E5%8A%9F%E8%83%BD" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-
-            <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-              <h3 class="text-xl font-bold text-green-500 mb-2">MWI QoL Profile on avatar</h3>
-              <p class="text-gray-500 mb-3">頭像點擊 > 個人資料</p>
-              <a href="https://greasyfork.org/zh-TW/scripts/531374-mwi-qol-profile-on-avatar" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                <i class="fa-solid fa-link mr-2"></i>訪問地址
-              </a>
-            </div>
-          </div>  
-        </section>
-      </main>
-    
-      <!-- 頁腳 -->
-      <footer class="bg-dark text-white py-8 mt-12">
-        <div class="container mx-auto px-4">
-          <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-4 md:mb-0">
-              <h3 class="text-xl font-bold mb-2">MWI插件彙總</h3>
-              <p class="text-gray-400">為您提供MWI遊戲最佳插件體驗</p>
-            </div>
-            <div class="flex space-x-6">
-              <a href="https://github.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="GitHub">
-                <i class="fa-brands fa-github text-xl"></i>
-              </a>
-              <a href="https://discord.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="Discord">
-                <i class="fa-brands fa-discord text-xl"></i>
-              </a>
-              <a href="https://x.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="X (Twitter)">
-                <i class="fa-brands fa-twitter text-xl"></i>
-              </a>
-            </div>
-          </div>
-          <div class="border-t border-gray-800 mt-6 pt-6 text-center text-gray-500">
-            <p>&copy; 2025 MWI插件彙總 - 保留所有權利</p>
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-primary mb-2">Steam版本相容性插件</h3>
+            <p class="text-gray-500 mb-3">Steam版本安裝MWItools前置條件</p>
+            <a href="https://greasyfork.org/en/scripts/497410-mwitools-addon-for-steam-version" target="_blank" class="inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
           </div>
         </div>
-      </footer>
-    </div>
+      </section>
 
-    <!-- 遮罩層 -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+      <!-- 強烈推薦 -->
+      <section id="highly-recommended" class="mb-12">
+        <div class="border-b-2 border-accent mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">強烈推薦</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-accent mb-2">食用工具</h3>
+            <p class="text-gray-500 mb-3">開箱記錄、箱子期望、公會釘釘、出警隊友</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/499963-%E9%93%B6%E6%B2%B3%E5%A5%B6%E7%89%9B-%E9%A3%9F%E7%94%A8%E5%B7%A5%E5%85%B7" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
 
-    <script>
-      // 側邊欄切換
-      const sidebar = document.getElementById('sidebar');
-      const openSidebarBtn = document.getElementById('openSidebar');
-      const closeSidebarBtn = document.getElementById('closeSidebar');
-      const overlay = document.getElementById('overlay');
-      const pageTitle = document.getElementById('pageTitle');
-      const friendLinks = document.getElementById('friendLinks');
-      const submenuFriendLinks = document.getElementById('submenuFriendLinks');
-      
-      // 存储上一次非友情链接的标题
-      let lastNonFriendTitle = 'MWI插件彙總';
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-accent mb-2">MWI TaskManager</h3>
+            <p class="text-gray-500 mb-3">任務界面美化與排序優化</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/509720-mwi-taskmanager" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
 
-      // 初始化
-      document.addEventListener('DOMContentLoaded', () => {
-        // 设置主导航项点击事件
-        document.querySelectorAll('#sidebar > nav > ul > li > a').forEach(link => {
-            link.addEventListener('click', handleNavClick);
-        });
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-accent mb-2">物品價格走勢</h3>
+            <p class="text-gray-500 mb-3">內置價格走勢</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/530217-mwi-price-history-viewer-modified-%E9%93%B6%E6%B2%B3%E7%89%9B%E7%89%A9%E5%93%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%A8%E5%B0%8F%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
 
-        // 设置友情链接菜单展开/折叠
-        friendLinks.addEventListener('click', (e) => {
-          e.preventDefault();
-          friendLinks.classList.toggle('expanded');
-          setActiveNav(friendLinks);
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-accent mb-2">Ranged Way Idle</h3>
+            <p class="text-gray-500 mb-3">Magic Way Idle改</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/535671-ranged-way-idle" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-accent mb-2">MWI QQShow</h3>
+            <p class="text-gray-500 mb-3">戰鬥小人頭像</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/535371-mwi-qqshow" target="_blank" class="inline-block bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 工具與統計 -->
+      <section id="tools-statistics" class="mb-12">
+        <div class="border-b-2 border-accent mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">工具與統計</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <!-- 修改为和其他板块一致的grid布局 -->
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-secondary mb-2">在線強化統計</h3>
+            <p class="text-gray-500 mb-3">強化概率統計</p>
+            <a href="https://greasyfork.org/zh-CN/scripts/531872-mwi-ultimate-enhancement-tracker-v3-7-3" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-secondary mb-2">MWI房屋升級材料計算器</h3>
+            <p class="text-gray-500 mb-3">自動計算房屋升級所需材料</p>
+            <a href="https://greasyfork.cc/zh-CN/scripts/528870-mwi%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%E6%9D%90%E6%96%99%E8%AE%A1%E7%AE%97%E5%99%A8" target="_blank" class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+        </div>  
+      </section> 
+
+      <!-- 經濟與交易 -->
+      <section id="economic-trade" class="mb-12">
+        <div class="border-b-2 border-accent mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">經濟與交易</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-yellow-500 mb-2">mooket</h3>
+            <p class="text-gray-500 mb-3">銀河奶牛歷史價格,（包含強化物品）</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/530316-mooket" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-yellow-500 mb-2">MWIAlchemyCalc</h3>
+            <p class="text-gray-500 mb-3">顯示煉金收益和產出統計,需安裝mooket</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/530757-mwialchemycalc" target="_blank" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+        </div>  
+      </section>
+
+      <!-- 戰鬥與特效 -->
+      <section id="battle-effects" class="mb-12">
+        <div class="border-b-2 border-accent mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">戰鬥與特效</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-red-500 mb-2">MWI-Hit-Tracker-Canvas</h3>
+            <p class="text-gray-500 mb-3">註1:戰鬥特效,（註1、註2擇一下載）</p>
+            <a href="https://greasyfork.org/en/scripts/535422-mwi-hit-tracker-canvas" target="_blank" class="inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-red-500 mb-2">MWI-Hit-Tracker</h3>
+            <p class="text-gray-500 mb-3">註2:戰鬥特效,（註1、註2擇一下載）</p>
+            <a href="https://greasyfork.org/zh-CN/scripts/535181-mwi-hit-tracker" target="_blank" class="inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+        </div>  
+      </section>
+
+      <!-- 趣味與輔助-->
+      <section id="fun-utils" class="mb-12">
+        <div class="border-b-2 border-accent mb-6">
+          <h2 class="text-2xl font-bold text-dark inline-block pb-2 border-b-4 border-accent">趣味與輔助</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-green-500 mb-2">Better MWI Chat</h3>
+            <p class="text-gray-500 mb-3">Make Chat Great Again!</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/535848-better-mwi-chat" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-green-500 mb-2">好友助手</h3>
+            <p class="text-gray-500 mb-3">為MWI遊戲的好友頁面添加分組和備註功能</p>
+            <a href="https://greasyfork.cc/zh-CN/scripts/530646-mwi-%E5%A5%BD%E5%8F%8B%E5%8A%A9%E6%89%8B" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
           
-          // 不更新标题，保持lastNonFriendTitle
-          pageTitle.textContent = lastNonFriendTitle;
-        });
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-green-500 mb-2">牛牛+1</h3>
+            <p class="text-gray-500 mb-3">這很重要,所以要說3次</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/531919-%E9%93%B6%E6%B2%B3%E5%A4%8D%E8%AF%BB%E6%94%BE%E7%BD%AE-1%E5%8A%9F%E8%83%BD" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
 
-        // 设置子菜单导航项点击事件（不更新标题）
-        document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // 设置子菜单导航项为活跃状态
-            setActiveNav(link);
-            
-            // 展开友情链接菜单
-            friendLinks.classList.add('expanded');
-            
-            // 获取链接的href属性并导航
-            const targetUrl = link.getAttribute('href');
-            if (targetUrl && targetUrl !== '#') {
-                window.open(targetUrl, '_blank'); // 在新窗口打开链接
-            }
-            
-            // 阻止事件冒泡
-            e.stopPropagation();
-            
-            // 关闭侧边栏（移动端）
-            if (window.innerWidth < 1024) {
-                closeSidebar();
-            }
-            
-            // 不更新标题，保持lastNonFriendTitle
-            pageTitle.textContent = lastNonFriendTitle;
-          });
-        });
+          <div class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
+            <h3 class="text-xl font-bold text-green-500 mb-2">MWI QoL Profile on avatar</h3>
+            <p class="text-gray-500 mb-3">頭像點擊 > 個人資料</p>
+            <a href="https://greasyfork.org/zh-TW/scripts/531374-mwi-qol-profile-on-avatar" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+              <i class="fa-solid fa-link mr-2"></i>訪問地址
+            </a>
+          </div>
+        </div>  
+      </section>
+    </main>
 
-        // 初始化第一个主导航项为活跃状态
-        const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
-        if (firstNavItem) {
-          setActiveNav(firstNavItem);
-          pageTitle.textContent = firstNavItem.querySelector('.nav-text').textContent;
-        }
+    <!-- 頁腳 -->
+    <footer class="bg-dark text-white py-8 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h3 class="text-xl font-bold mb-2">MWI插件彙總</h3>
+            <p class="text-gray-400">為您提供MWI遊戲最佳插件體驗</p>
+          </div>
+          <div class="flex space-x-6">
+            <a href="https://github.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="GitHub">
+              <i class="fa-brands fa-github text-xl"></i>
+            </a>
+            <a href="https://discord.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="Discord">
+              <i class="fa-brands fa-discord text-xl"></i>
+            </a>
+            <a href="https://x.com/" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="X (Twitter)">
+              <i class="fa-brands fa-twitter text-xl"></i>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-6 pt-6 text-center text-gray-500">
+          <p>&copy; 2025 MWI插件彙總 - 保留所有權利</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 遮罩層 -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+
+  <script>
+    // 側邊欄切換
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('openSidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+    const overlay = document.getElementById('overlay');
+    const pageTitle = document.getElementById('pageTitle');
+    const friendLinks = document.getElementById('friendLinks');
+    const submenuFriendLinks = document.getElementById('submenuFriendLinks');
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      // 设置主导航项点击事件
+      document.querySelectorAll('#sidebar > nav > ul > li > a').forEach(link => {
+        link.addEventListener('click', handleNavClick);
       });
 
-      // 处理导航项点击
-      function handleNavClick(e) {
+      // 设置友情链接菜单展开/折叠
+      friendLinks.addEventListener('click', (e) => {
         e.preventDefault();
+        friendLinks.classList.toggle('expanded');
         
-        const link = e.currentTarget;
-        const targetId = link.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          // 更新页面标题
-          const navText = link.querySelector('.nav-text').textContent;
-          
-          // 仅当不是友情链接时，更新lastNonFriendTitle
-          if (navText !== '友情連結') {
-              lastNonFriendTitle = navText;
-          }
-          
-          pageTitle.textContent = lastNonFriendTitle;
-          
-          // 滚动到目标区域
-          const headerHeight = document.querySelector('header').offsetHeight;
-          const scrollTop = targetElement.offsetTop - headerHeight;
-          
-          window.scrollTo({
-              top: scrollTop,
-              behavior: 'smooth'
-          });
-          
-          // 设置点击的导航项为活跃状态
-          setActiveNav(link);
-          
-          // 关闭友情链接子菜单
-          friendLinks.classList.remove('expanded');
-        }
-        
-        // 关闭侧边栏（移动端）
-        if (window.innerWidth < 1024) {
-            closeSidebar();
-        }
-      }
+        // 设置友情链接标题为活跃状态
+        setActiveNav(friendLinks);
+      });
 
-      // 设置导航项活跃状态
-      function setActiveNav(activeElement) {
-        // 移除所有导航项的活跃状态
-        document.querySelectorAll('#sidebar .nav-item.active, #sidebar > nav > ul > li > a.active, #friendLinks.active').forEach(item => {
-            item.classList.remove('active');
-        });
-        document.querySelectorAll('#submenuFriendLinks a.active').forEach(item => {
-            item.classList.remove('active');
+      // 设置子菜单导航项点击事件
+      document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
+        link.addEventListener('click', handleSubmenuClick);
+      });
+
+      // 初始化第一个主导航项为活跃状态
+      const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
+      if (firstNavItem) {
+        setActiveNav(firstNavItem);
+      }
+    });
+
+    // 处理导航项点击
+    function handleNavClick(e) {
+      e.preventDefault();
+      
+      const link = e.currentTarget;
+      const targetId = link.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // 更新页面标题
+        const navText = link.querySelector('.nav-text').textContent;
+        pageTitle.textContent = navText;
+        
+        // 滚动到目标区域
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const scrollTop = targetElement.offsetTop - headerHeight;
+        
+        window.scrollTo({
+          top: scrollTop,
+          behavior: 'smooth'
         });
         
-        // 为当前导航项添加活跃状态
-        activeElement.classList.add('active');
+        // 设置点击的导航项为活跃状态
+        setActiveNav(link);
+        
+        // 关闭友情链接子菜单
+        friendLinks.classList.remove('expanded');
       }
+      
+      // 关闭侧边栏（移动端）
+      if (window.innerWidth < 1024) {
+        closeSidebar();
+      }
+    }
 
-      // 关闭侧边栏
-      function closeSidebar() {
-        sidebar.classList.add('-translate-x-full');
+    // 处理子菜单导航项点击
+    function handleSubmenuClick(e) {
+      e.preventDefault();
+      
+      const link = e.currentTarget;
+      
+      // 更新页面标题
+      const navText = link.textContent.trim();
+      pageTitle.textContent = navText;
+      
+      // 设置子菜单导航项为活跃状态
+      setActiveNav(link);
+      
+      // 展开友情链接菜单
+      friendLinks.classList.add('expanded');
+      
+      // 获取链接的href属性并导航
+      const targetUrl = link.getAttribute('href');
+      if (targetUrl && targetUrl !== '#') {
+        window.open(targetUrl, '_blank'); // 在新窗口打开链接
+      }
+      
+      // 阻止事件冒泡
+      e.stopPropagation();
+      
+      // 关闭侧边栏（移动端）
+      if (window.innerWidth < 1024) {
+        closeSidebar();
+      }
+    }
+
+    // 设置导航项活跃状态
+    function setActiveNav(activeElement) {
+      // 移除所有导航项的活跃状态
+      document.querySelectorAll('#sidebar .nav-item.active, #sidebar > nav > ul > li > a.active, #friendLinks.active').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.querySelectorAll('#submenuFriendLinks a.active').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 为当前导航项添加活跃状态
+      activeElement.classList.add('active');
+    }
+
+    // 关闭侧边栏
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // 检测屏幕尺寸变化，调整侧边栏状态
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        sidebar.classList.remove('-translate-x-full');
         overlay.classList.add('hidden');
         document.body.style.overflow = '';
-      }
-
-      // 检测屏幕尺寸变化，调整侧边栏状态
-      window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1024) {
-          sidebar.classList.remove('-translate-x-full');
-          overlay.classList.add('hidden');
-          document.body.style.overflow = '';
-        } 
-        else if (!sidebar.classList.contains('-translate-x-full')) {
-          overlay.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        }
-      });
-
-      // 点击侧边栏外部关闭侧边栏
-      document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
-          if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-            closeSidebar();
-          }
-        }
-      });
-
-      // 打开侧边栏
-      openSidebarBtn.addEventListener('click', () => {
-        sidebar.classList.remove('-translate-x-full');
+      } else if (!sidebar.classList.contains('-translate-x-full')) {
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-      });
+      }
+    });
 
-      // 关闭侧边栏
-      closeSidebarBtn.addEventListener('click', closeSidebar);
-      overlay.addEventListener('click', closeSidebar);
+    // 点击侧边栏外部关闭侧边栏
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
+        if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+          closeSidebar();
+        }
+      }
+    });
+
+    // 打开侧边栏
+    openSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.remove('-translate-x-full');
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // 关闭侧边栏
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
     </script>
   </body>
 </html>
