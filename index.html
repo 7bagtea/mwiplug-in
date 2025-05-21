@@ -632,60 +632,52 @@
       e.preventDefault();
       
       const link = e.currentTarget;
-      const targetId = link.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
       
-      if (targetElement) {
-        // 更新页面标题
+      // 判断导航项类型
+      const isFriendLink = link === friendLinks;
+      const isFriendSubLink = link.closest('#submenuFriendLinks') !== null;
+      
+      // 更新页面标题（仅当不是友情链接子项时）
+      if (!isFriendSubLink) {
         const navText = link.querySelector('.nav-text').textContent;
         pageTitle.textContent = navText;
-        
-        // 滚动到目标区域
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const scrollTop = targetElement.offsetTop - headerHeight;
-        
-        window.scrollTo({
-          top: scrollTop,
-          behavior: 'smooth'
-        });
-        
-        // 设置点击的导航项为活跃状态
-        setActiveNav(link);
-        
-        // 关闭友情链接子菜单
-        friendLinks.classList.remove('expanded');
       }
       
-      // 关闭侧边栏（移动端）
-      if (window.innerWidth < 1024) {
-        closeSidebar();
+      // 滚动到目标区域（仅当不是友情链接相关项时）
+      if (!isFriendLink && !isFriendSubLink) {
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          const headerHeight = document.querySelector('header').offsetHeight;
+          const scrollTop = targetElement.offsetTop - headerHeight;
+          
+          window.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+          });
+        }
       }
-    }
-
-    // 处理子菜单导航项点击
-    function handleSubmenuClick(e) {
-      e.preventDefault();
       
-      const link = e.currentTarget;
-      
-      // 更新页面标题
-      const navText = link.textContent.trim();
-      pageTitle.textContent = navText;
-      
-      // 设置子菜单导航项为活跃状态
+      // 设置点击的导航项为活跃状态
       setActiveNav(link);
       
-      // 展开友情链接菜单
-      friendLinks.classList.add('expanded');
-      
-      // 获取链接的href属性并导航
-      const targetUrl = link.getAttribute('href');
-      if (targetUrl && targetUrl !== '#') {
-        window.open(targetUrl, '_blank'); // 在新窗口打开链接
+      // 处理友情链接菜单状态
+      if (isFriendLink) {
+        friendLinks.classList.toggle('expanded');
+      } else if (isFriendSubLink) {
+        friendLinks.classList.add('expanded'); // 确保子菜单展开
+      } else {
+        friendLinks.classList.remove('expanded'); // 关闭友情链接子菜单
       }
       
-      // 阻止事件冒泡
-      e.stopPropagation();
+      // 导航到外部链接（仅针对友情链接子菜单）
+      if (isFriendSubLink) {
+        const targetUrl = link.getAttribute('href');
+        if (targetUrl && targetUrl !== '#') {
+          window.open(targetUrl, '_blank');
+        }
+      }
       
       // 关闭侧边栏（移动端）
       if (window.innerWidth < 1024) {
