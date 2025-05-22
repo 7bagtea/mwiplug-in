@@ -17,17 +17,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
   <script>
 
-    /* !!! 以下註解很重要,所以說三次 !!! */
-    /* 类似这种，针对不同屏幕尺寸写不同 css
-    gityxcgm-5347 上午 10:25:31
-    上面这个只对宽度 300 以下的屏幕生效
-    平板竖屏一般是 800 宽度，横屏可能是 1024 到 1280
-    @media screen and (max-width: 300px) {
-    body {
-    background-color:lightblue;
-    }
-    */
-
     tailwind.config = {
       theme: {
         extend: {
@@ -228,8 +217,8 @@
     
     /* 訪問地址 */
     .fa-link {
-      opacity: 0.4; /* 使用 0-1 之间的值，不需要 px */
-      transition: opacity 1s ease; /* 添加过渡效果 */
+      opacity: 0.4;
+      transition: opacity 1s ease;
     }
 
     /* 鼠标悬停时增加图标透明度 */
@@ -245,7 +234,7 @@
     /* 针对常见平板设备高度的通用调整 */
     @media screen and (min-height: 700px) and (max-height: 1300px) {
       .pp-5 {
-        padding-bottom: clamp(6rem, 8vh, 8rem) !important; /* 使用clamp函数动态计算间距 */
+        padding-bottom: clamp(6rem, 8vh, 8rem) !important;
       }
     }
 
@@ -257,35 +246,36 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.6); /* 灰黑色半透明背景 */
-        display: none; /* 初始隐藏 */
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
         justify-content: center;
         align-items: center;
-        z-index: 9999; /* 确保层级最高 */
+        z-index: 9999;
+        overflow-y: auto; /* 允许垂直滚动 */
     }
 
-    /* 弹框内容样式（使用网站主色调整） */
+    /* 弹框内容样式 */
     .modal-content {
-        background-color: #F8FAFC; /* 网站主色浅色背景 */
-        padding: 2rem 3rem;
+        background-color: #F8FAFC;
+        padding: 2rem 1.5rem; /* 减少左右内边距，适应小屏幕 */
         border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
+        max-width: 400px; /* 在小屏幕上使用更大的宽度百分比 */
         width: 100%;
         text-align: center;
+        margin: 1rem; /* 添加边距，避免紧贴屏幕边缘 */
     }
 
     /* 友情連結網址超出格子問題 */
     .link-pre {
-      font-family: inherit; /* 继承父元素字体 */
-      white-space: pre-wrap; /* 保留空白但允许换行 */
-      word-wrap: break-word; /* 长单词换行 */
+      font-family: inherit;
+      white-space: pre-wrap;
+      word-wrap: break-word;
       max-width: 100%;
       margin: 0.5rem 0;
-      padding: 0.3rem 0; /* 添加内边距使链接更清晰 */
-      line-height: 1.8rem; /* 新增属性，设置行距，可按需调整 */
+      padding: 0.3rem 0;
+      line-height: 1.8rem;
     }
-
 
     /* 按钮样式 */
     .modal-btn {
@@ -296,15 +286,16 @@
         cursor: pointer;
         transition: opacity 0.3s;
         font-family: 'Inter', sans-serif;
+        min-width: 80px; /* 确保按钮有足够宽度，便于触摸 */
     }
 
-    /* 确认按钮（使用网站主色 #3B82F6） */
+    /* 确认按钮 */
     .confirm-btn {
-        background-color: #3B82F6; /* 与导航栏主色一致 */
+        background-color: #3B82F6;
         color: white;
     }
 
-    /* 取消按钮（使用网站次级色 #E9ECEF） */
+    /* 取消按钮 */
     .cancel-btn {
         background-color: #E9ECEF;
         color: #333;
@@ -313,6 +304,17 @@
     /* 鼠标悬停效果 */
     .modal-btn:hover {
         opacity: 0.8;
+    }
+    
+    /* 移动端弹窗适配 */
+    @media (max-width: 640px) {
+      .modal-content {
+        padding: 1.5rem 1rem; /* 进一步减少小屏幕上的内边距 */
+      }
+      
+      .modal-btn {
+        padding: 0.5rem 1rem; /* 调整按钮大小 */
+      }
     }
   </style>
 </head>
@@ -567,7 +569,7 @@
           <div
             class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
             <h3 class="text-xl font-bold text-secondary mb-2">在線強化統計</h3>
-            <p class="text-gray-500 mb-3">強化概率統計</p>
+            <p class="text-gray-500 mb-3">強化概率統計<p class="text-gray-500 mb-3">強化概率統計</p>
             <a href="https://greasyfork.org/zh-CN/scripts/531872-mwi-ultimate-enhancement-tracker-v3-7-3"
               target="_blank"
               class="inline-block bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors">
@@ -797,7 +799,12 @@
 
         // 设置子菜单导航项点击事件
         document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
-          link.addEventListener('click', handleNavClick);
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = link.href;
+            currentTargetUrl = url;
+            showConfirmModal(url);
+          });
         });
 
         // 初始化第一个主导航项为活跃状态
@@ -811,7 +818,7 @@
         // 初始化外部链接弹窗（使用事件委托）
         document.addEventListener('click', (e) => {
           const link = e.target.closest('a.external-link[target="_blank"]');
-          if (link) {
+          if (link && !link.closest('#submenuFriendLinks')) {
             e.preventDefault();
             const url = link.href;
             currentTargetUrl = url;
@@ -846,7 +853,50 @@
         sidebar.addEventListener('click', (e) => {
           e.stopPropagation(); // 阻止事件冒泡到document
         });
+        
+        // 添加触摸事件支持
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchmove', handleTouchMove, false);
       });
+
+      // 触摸事件处理
+      let xDown = null;
+      let yDown = null;
+      
+      function handleTouchStart(evt) {
+        xDown = evt.touches[0].clientX;
+        yDown = evt.touches[0].clientY;
+      }
+      
+      function handleTouchMove(evt) {
+        if (!xDown || !yDown) {
+          return;
+        }
+      
+        const xUp = evt.touches[0].clientX;
+        const yUp = evt.touches[0].clientY;
+      
+        const xDiff = xDown - xUp;
+        const yDiff = yDown - yUp;
+      
+        // 如果横向滑动距离大于纵向滑动距离，认为是横向滑动
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+          // 如果是从右向左滑动且侧边栏关闭，则打开侧边栏
+          if (xDiff > 50 && window.innerWidth < 1024 && sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          }
+          // 如果是从左向右滑动且侧边栏打开，则关闭侧边栏
+          else if (xDiff < -50 && window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+            closeSidebar();
+          }
+        }
+      
+        // 重置触摸位置
+        xDown = null;
+        yDown = null;
+      }
 
       // 处理导航项点击
       function handleNavClick(e) {
@@ -940,6 +990,11 @@
         
         const modal = document.getElementById('confirmModal');
         modal.style.display = 'flex';
+        
+        // 添加动画效果
+        setTimeout(() => {
+          modal.querySelector('.modal-content').classList.add('animate-fade-in');
+        }, 10);
       }
 
       // 隐藏弹框函数
@@ -984,4 +1039,4 @@
       });
     </script>
   </body>
-</html>
+</html> 
