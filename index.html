@@ -804,6 +804,8 @@
         const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
         if (firstNavItem) {
           setActiveNav(firstNavItem);
+          const navText = firstNavItem.querySelector('.nav-text').textContent;
+          pageTitle.textContent = navText;
         }
 
         // 初始化外部链接弹窗（使用事件委托）
@@ -816,12 +818,40 @@
             showConfirmModal(url);
           }
         });
+
+        // 汉堡菜单按钮打开侧边栏
+        openSidebarBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // 防止事件冒泡到document
+          sidebar.classList.remove('-translate-x-full');
+          overlay.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        });
+
+        // 关闭按钮关闭侧边栏
+        closeSidebarBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // 防止事件冒泡到document
+          closeSidebar();
+        });
+
+        // 点击侧边栏外部关闭侧边栏
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
+            if (!sidebar.classList.contains('-translate-x-full')) {
+              closeSidebar();
+            }
+          }
+        });
+
+        // 防止侧边栏内部点击触发外部关闭
+        sidebar.addEventListener('click', (e) => {
+          e.stopPropagation(); // 阻止事件冒泡到document
+        });
       });
 
       // 处理导航项点击
       function handleNavClick(e) {
         e.preventDefault();
-
+        
         const link = e.currentTarget;
         const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
 
@@ -898,22 +928,6 @@
         }
       });
 
-      // 点击侧边栏外部关闭侧边栏
-      document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
-          if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-            closeSidebar();
-          }
-        }
-      });
-
-      // 打开侧边栏
-      openSidebarBtn.addEventListener('click', () => {
-        sidebar.classList.remove('-translate-x-full');
-        overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      });
-
       // 显示弹框函数
       function showConfirmModal(url) {
         const linkUrlSpan = document.getElementById('linkUrl');
@@ -966,7 +980,7 @@
       document.getElementById('confirmModal').addEventListener('click', (e) => {
         if (e.target === document.getElementById('confirmModal')) {
           hideConfirmModal();
-        }
+        } 
       });
     </script>
   </body>
