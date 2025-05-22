@@ -242,17 +242,10 @@
     padding-bottom:5rem !important;
     }
 
-    /* 针对iPad Air竖屏高度的调整 */
-    @media screen and (min-height: 1000px) and (max-height: 1200px) {
+    /* 针对常见平板设备高度的通用调整 */
+    @media screen and (min-height: 700px) and (max-height: 1300px) {
       .pp-5 {
-        padding-bottom: 7rem !important;
-      }
-    }
-
-    /* 针对iPad Air横屏高度的调整 */
-    @media screen and (min-height: 700px) and (max-height: 900px) {
-      .pp-5 {
-        padding-bottom: 6rem !important;
+        padding-bottom: clamp(6rem, 8vh, 8rem) !important; /* 使用clamp函数动态计算间距 */
       }
     }
 
