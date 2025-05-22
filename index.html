@@ -16,6 +16,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
   <script>
+
+    /* !!! 以下註解很重要,所以說三次 !!! */
+    /* 类似这种，针对不同屏幕尺寸写不同 css
+    gityxcgm-5347 上午 10:25:31
+    上面这个只对宽度 300 以下的屏幕生效
+    平板竖屏一般是 800 宽度，横屏可能是 1024 到 1280
+    @media screen and (max-width: 300px) {
+    body {
+    background-color:lightblue;
+    }
+    */
+
     tailwind.config = {
       theme: {
         extend: {
@@ -256,6 +268,18 @@
         text-align: center;
     }
 
+    /* 友情連結網址超出格子問題 */
+    .link-pre {
+      font-family: inherit; /* 继承父元素字体 */
+      white-space: pre-wrap; /* 保留空白但允许换行 */
+      word-wrap: break-word; /* 长单词换行 */javascript:void(0);
+      max-width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.3rem 0; /* 添加内边距使链接更清晰 */
+      line-height: 1.8rem; /* 新增属性，设置行距，可按需调整 */
+    }
+
+
     /* 按钮样式 */
     .modal-btn {
         margin: 0 0.5rem;
@@ -418,7 +442,7 @@
       <section id="must-have" class="mb-12">
         <div class="border-b-2 border-primary mb-6"> <!-- 修改為與左側導航一致的顏色 -->
           <div class="inline-flex items-end border-b-4 border-primary pb-[2px]">
-            <span class="text-yellow-500 mr-1" aria-hidden="true">
+            <span class="text-yellow-500 mr-1" aria-hidden="true">  <!-- "mr-1",特別修改此處,其餘iconj為mr-2 -->
               <i class="fa-solid fa-star" style="font-size:22px; padding: 4px;"></i>
             </span>
             <h2 class="text-2xl font-bold text-dark">必裝系列</h2>
@@ -591,7 +615,7 @@
 
           <div
             class="plugin-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transform hover:-translate-y-1 transition-all">
-            <h3 class="text-xl font-bold text-yellow-500 mb-2">MWIAlchemyCalc</h3>
+            <h3 class="text-xl font-bold text-yellow-500 mb-2">MWI Alchemy Calc</h3>
             <p class="text-gray-500 mb-3">顯示煉金收益和產出統計,需安裝mooket</p>
             <a href="https://greasyfork.org/zh-TW/scripts/530757-mwialchemycalc" target="_blank"
               class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors">
@@ -721,14 +745,15 @@
   </div>
 
   <!-- 遮罩層 -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>javascript:void(0);
 
-  <!-- 新增：確認彈窗 -->
+  <!-- 新增：確認友情擴展連結彈窗 -->
   <div id="confirmModal">
     <div class="modal-content">
       <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
         即將打開外部連結<br>
-        <span id="linkUrl"></span><br>
+        <!-- "link-pre"解決彈窗友情網址超出邊界問題 -->
+        <span id="linkUrl" class="link-pre"></span><br>
         是否確認繼續？
       </p>
       <button class="modal-btn confirm-btn" id="confirmBtn">確認</button>
