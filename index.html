@@ -780,8 +780,10 @@
       const friendLinks = document.getElementById('friendLinks');
       const submenuFriendLinks = document.getElementById('submenuFriendLinks');
 
-      // 全局变量存储目标链接
+      // 全局变量存储目标链接和弹窗状态
       let currentTargetUrl = '';
+      let isModalOpen = false;
+      let isSidebarOpen = false;
 
       // 初始化
       document.addEventListener('DOMContentLoaded', () => {
@@ -801,9 +803,20 @@
         document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
-            const url = link.href;
-            currentTargetUrl = url;
-            showConfirmModal(url);
+            const isExternal = link.classList.contains('external-link');
+            
+            if (isExternal) {
+              // 外部链接处理
+              currentTargetUrl = link.href;
+              isModalOpen = true;
+              showConfirmModal(link.href);
+            } else {
+              // 内部导航处理
+              handleNavClick(e);
+              if (window.innerWidth < 1024 && isSidebarOpen) {
+                setTimeout(closeSidebar, 300);
+              }
+            }
           });
         });
 
@@ -815,87 +828,85 @@
           pageTitle.textContent = navText;
         }
 
-        // 初始化外部链接弹窗（使用事件委托）
-        document.addEventListener('click', (e) => {
-          const link = e.target.closest('a.external-link[target="_blank"]');
-          if (link && !link.closest('#submenuFriendLinks')) {
-            e.preventDefault();
-            const url = link.href;
-            currentTargetUrl = url;
-            showConfirmModal(url);
-          }
-        });
-
         // 汉堡菜单按钮打开侧边栏
         openSidebarBtn.addEventListener('click', (e) => {
-          e.stopPropagation(); // 防止事件冒泡到document
-          sidebar.classList.remove('-translate-x-full');
-          overlay.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
+          e.stopPropagation();
+          openSidebar();
         });
 
         // 关闭按钮关闭侧边栏
         closeSidebarBtn.addEventListener('click', (e) => {
-          e.stopPropagation(); // 防止事件冒泡到document
+          e.stopPropagation();
           closeSidebar();
         });
 
-        // 点击侧边栏外部关闭侧边栏
-        document.addEventListener('click', (e) => {
-          if (!sidebar.contains(e.target) && !openSidebarBtn.contains(e.target)) {
-            if (!sidebar.classList.contains('-translate-x-full')) {
-              closeSidebar();
-            }
+        // 点击侧边栏外部关闭侧边栏（仅当弹窗未打开时）
+        overlay.addEventListener('click', (e) => {
+          if (!isModalOpen && isSidebarOpen) {
+            closeSidebar();
           }
         });
 
         // 防止侧边栏内部点击触发外部关闭
         sidebar.addEventListener('click', (e) => {
-          e.stopPropagation(); // 阻止事件冒泡到document
+          e.stopPropagation();
         });
-        
-        // 添加触摸事件支持
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
+
+        // 初始化外部链接弹窗（使用事件委托）
+        document.addEventListener('click', (e) => {
+          const link = e.target.closest('a.external-link[target="_blank"]');
+          if (link && !link.closest('#submenuFriendLinks')) {
+            e.preventDefault();
+            currentTargetUrl = link.href;
+            isModalOpen = true;
+            showConfirmModal(link.href);
+          }
+        });
+
+        // 移动端优化：点击导航项后自动关闭侧边栏
+        document.querySelectorAll('#sidebar a:not(.external-link)').forEach(navLink => {
+          navLink.addEventListener('click', () => {
+            if (window.innerWidth < 1024 && isSidebarOpen) {
+              setTimeout(closeSidebar, 300);
+            }
+          });
+        });
+
+        // 检测屏幕尺寸变化，调整侧边栏状态
+        window.addEventListener('resize', updateSidebarState);
+        updateSidebarState(); // 初始化状态
       });
 
-      // 触摸事件处理
-      let xDown = null;
-      let yDown = null;
-      
-      function handleTouchStart(evt) {
-        xDown = evt.touches[0].clientX;
-        yDown = evt.touches[0].clientY;
+      // 打开侧边栏
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        isSidebarOpen = true;
       }
-      
-      function handleTouchMove(evt) {
-        if (!xDown || !yDown) {
-          return;
+
+      // 关闭侧边栏
+      function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        isSidebarOpen = false;
+      }
+
+      // 更新侧边栏状态（响应式）
+      function updateSidebarState() {
+        if (window.innerWidth >= 1024) {
+          sidebar.classList.remove('-translate-x-full');
+          overlay.classList.add('hidden');
+          document.body.style.overflow = '';
+          isSidebarOpen = true;
+        } else if (!sidebar.classList.contains('-translate-x-full')) {
+          overlay.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          isSidebarOpen = true;
+        } else {
+          isSidebarOpen = false;
         }
-      
-        const xUp = evt.touches[0].clientX;
-        const yUp = evt.touches[0].clientY;
-      
-        const xDiff = xDown - xUp;
-        const yDiff = yDown - yUp;
-      
-        // 如果横向滑动距离大于纵向滑动距离，认为是横向滑动
-        if (Math.abs(xDiff) > Math.abs(yDiff)) {
-          // 如果是从右向左滑动且侧边栏关闭，则打开侧边栏
-          if (xDiff > 50 && window.innerWidth < 1024 && sidebar.classList.contains('-translate-x-full')) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-          }
-          // 如果是从左向右滑动且侧边栏打开，则关闭侧边栏
-          else if (xDiff < -50 && window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-            closeSidebar();
-          }
-        }
-      
-        // 重置触摸位置
-        xDown = null;
-        yDown = null;
       }
 
       // 处理导航项点击
@@ -904,6 +915,7 @@
         
         const link = e.currentTarget;
         const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
+        const isExternal = link.classList.contains('external-link');
 
         // 更新页面标题（仅对主导航项）
         if (!isSubmenuLink) {
@@ -912,7 +924,7 @@
         }
 
         // 滚动到目标区域（仅对主导航项）
-        if (!isSubmenuLink) {
+        if (!isSubmenuLink && !isExternal) {
           const targetId = link.getAttribute('href').substring(1);
           const targetElement = document.getElementById(targetId);
 
@@ -938,11 +950,6 @@
         } else {
           friendLinks.classList.remove('expanded');
         }
-
-        // 关闭侧边栏（移动端）
-        if (window.innerWidth < 1024) {
-          closeSidebar();
-        }
       }
 
       // 设置导航项活跃状态
@@ -959,25 +966,6 @@
         activeElement.classList.add('active');
       }
 
-      // 关闭侧边栏
-      function closeSidebar() {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-      }
-
-      // 检测屏幕尺寸变化，调整侧边栏状态
-      window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1024) {
-          sidebar.classList.remove('-translate-x-full');
-          overlay.classList.add('hidden');
-          document.body.style.overflow = '';
-        } else if (!sidebar.classList.contains('-translate-x-full')) {
-          overlay.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        }
-      });
-
       // 显示弹框函数
       function showConfirmModal(url) {
         const linkUrlSpan = document.getElementById('linkUrl');
@@ -986,15 +974,16 @@
         // 计算并保留滚动条宽度
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         document.body.style.paddingRight = `${scrollbarWidth}px`;
-        document.body.style.overflow = 'hidden'; // 禁止滚动
+        document.body.style.overflow = 'hidden';
         
         const modal = document.getElementById('confirmModal');
         modal.style.display = 'flex';
         
-        // 添加动画效果
-        setTimeout(() => {
-          modal.querySelector('.modal-content').classList.add('animate-fade-in');
-        }, 10);
+        // 移动端优化：确保弹窗在屏幕内
+        if (window.innerWidth < 768) {
+          modal.style.maxWidth = '90%';
+          modal.style.margin = '1rem auto';
+        }
       }
 
       // 隐藏弹框函数
@@ -1006,18 +995,7 @@
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '';
         currentTargetUrl = '';
-      }
-
-      // 判断是否为外部链接
-      function isExternalLink(url) {
-        if (!url) return false;
-        try {
-          const currentHost = window.location.hostname;
-          const linkHost = new URL(url).hostname;
-          return linkHost !== currentHost;
-        } catch (e) {
-          return false; // 无效URL
-        }
+        isModalOpen = false;
       }
 
       // 确认按钮点击事件
@@ -1029,7 +1007,10 @@
       });
 
       // 取消按钮点击事件
-      document.getElementById('cancelBtn').addEventListener('click', hideConfirmModal);
+      document.getElementById('cancelBtn').addEventListener('click', (e) => {
+        e.stopPropagation(); // 防止事件冒泡
+        hideConfirmModal();
+      });
 
       // 点击背景区域关闭弹框
       document.getElementById('confirmModal').addEventListener('click', (e) => {
