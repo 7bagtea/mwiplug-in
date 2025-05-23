@@ -784,6 +784,7 @@
       let currentTargetUrl = '';
       let isModalOpen = false;
       let isSidebarOpen = false;
+      let originalBodyPaddingRight = '';
 
       // 初始化
       document.addEventListener('DOMContentLoaded', () => {
@@ -966,18 +967,42 @@
         activeElement.classList.add('active');
       }
 
-      // 显示弹框函数
+      // 计算滚动条宽度
+      function getScrollbarWidth() {
+        const scrollDiv = document.createElement('div');
+        scrollDiv.style.width = '100px';
+        scrollDiv.style.height = '100px';
+        scrollDiv.style.overflow = 'scroll';
+        scrollDiv.style.position = 'absolute';
+        scrollDiv.style.top = '-9999px';
+        document.body.appendChild(scrollDiv);
+        const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv);
+        return scrollbarWidth;
+      }
+
+      // 显示弹框函数（最终优化：解决所有屏幕尺寸下的位移问题）
       function showConfirmModal(url) {
         const linkUrlSpan = document.getElementById('linkUrl');
         linkUrlSpan.textContent = url;
         
-        // 计算并保留滚动条宽度
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-        document.body.style.overflow = 'hidden';
-        
         const modal = document.getElementById('confirmModal');
         modal.style.display = 'flex';
+        
+        // 保存原始的body内边距
+        originalBodyPaddingRight = document.body.style.paddingRight;
+        
+        // 检测是否有垂直滚动条
+        const hasVerticalScrollbar = document.body.scrollHeight > window.innerHeight;
+        
+        // 如果有滚动条，添加内边距以防止内容位移
+        if (hasVerticalScrollbar) {
+          const scrollbarWidth = getScrollbarWidth();
+          document.body.style.paddingRight = `${parseInt(getComputedStyle(document.body).paddingRight) + scrollbarWidth}px`;
+        }
+        
+        // 禁止页面滚动
+        document.body.style.overflow = 'hidden';
         
         // 移动端优化：确保弹窗在屏幕内
         if (window.innerWidth < 768) {
@@ -986,14 +1011,17 @@
         }
       }
 
-      // 隐藏弹框函数
+      // 隐藏弹框函数（最终优化：恢复所有样式）
       function hideConfirmModal() {
         const modal = document.getElementById('confirmModal');
         modal.style.display = 'none';
         
-        // 恢复滚动条和内边距
-        document.body.style.overflow = 'auto';
-        document.body.style.paddingRight = '';
+        // 恢复原始的body内边距
+        document.body.style.paddingRight = originalBodyPaddingRight;
+        
+        // 恢复页面滚动
+        document.body.style.overflow = '';
+        
         currentTargetUrl = '';
         isModalOpen = false;
       }
@@ -1020,4 +1048,4 @@
       });
     </script>
   </body>
-</html> 
+</html>
