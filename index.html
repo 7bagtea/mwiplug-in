@@ -17,6 +17,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
   <script>
 
+    /*
+    gityxcom-5347 2025/5/21 上午 10:24:51
+      @media screen and (max-width: 300px) {
+          body {
+              background-color:lightblue;
+          }
+      }
+
+    gityxcom-5347 2025/5/21 上午 10:25:06
+     类似这种，针对不同屏幕尺寸写不同css
+     */
+
     tailwind.config = {
       theme: {
         extend: {
@@ -224,7 +236,7 @@
 
     /* 增加頁面高度,讓趣味與輔助標題正確置頂 */
     .pp-5{
-    padding-bottom:5rem !important;
+    padding-bottom:6rem !important;
     }
 
     /* 针对常见平板设备高度的通用调整 */
@@ -320,11 +332,12 @@
   <div id="sidebar"
     class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
     <div class="p-4 flex justify-between items-center border-b">
+      <div class="lg:hidden w-3 h-5 flex-shrink-0"></div> <!-- 為了讓快速導航tiltle,不在屏幕縮小時跑出的X號,產生位移所添加的div -->
       <h2 class="text-xl font-bold text-primary mx-auto"
-        style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 29px; border-radius: 8px;">
+        style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 20px; border-radius: 8px;">
         <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;font-size: 24px;"></i>快速導航
       </h2>
-      <button id="closeSidebar" class="lg:hidden text-gray-500 hover:text-primary transition-colors">
+      <button id="closeSidebar" class="lg:hidden w-3 h-5 text-gray-500 hover:text-primary transition-colors"> <!-- 給這button寬跟高 -->
         <i class="fa-solid fa-times"></i>
       </button>
     </div>
