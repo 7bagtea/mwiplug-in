@@ -324,6 +324,15 @@
         padding: 0.5rem 1rem; /* 调整按钮大小 */
       }
     }
+
+@media (max-width: 768px) { /* 移动端断点，可根据需求调整 */
+  .py-4 .custom-scrollbar {
+    max-h: calc(100vh - 8rem); /* 增加高度预留，避免内容被截断 */
+    overflow-y: auto;
+  }
+}
+
+
   </style>
 </head>
 
@@ -342,7 +351,7 @@
       </button>
     </div>
     <nav class="py-4">
-      <ul class="space-y-1 px-4 max-h-[calc(100vh-6rem)] overflow-y-auto lg:max-h-none lg:overflow-visible">
+      <ul class="space-y-1 px-4 max-h-[calc(100vh-6rem)] overflow-y-auto lg:max-h-none lg:overflow-visible custom-scrollbar">
         <li>
           <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
             <span class="nav-icon">
@@ -424,7 +433,6 @@
             </a>
           </div>
         </li>
-        <br>
         <!-- 鼠标悬停时文字变红、加粗 -->
         <li style="font-size: 18px; color: black; margin:10px;" onmouseover="this.style.color='red'; this.style.fontWeight='bold'"
           onmouseout="this.style.color='black'; this.style.fontWeight='normal'">
