@@ -328,12 +328,6 @@
 
     /* 移动端优化 */
     @media (max-width: 768px) {
-      /* 修复滚动容器高度 */
-      .py-4 .custom-scrollbar {
-        max-height: calc(100vh - 8rem); /* 修正为 max-height */
-        overflow-y: auto;
-      }
-      
       /* 侧边栏Flex容器高度 */
       #sidebar .flex-col {
         height: 100vh;
@@ -374,7 +368,7 @@
       
       <!-- 原导航区域，修改为Flex自动填充空间 -->
       <nav class="py-4 flex-1 overflow-y-auto">
-        <ul class="space-y-1 px-4 lg:overflow-visible custom-scrollbar">
+        <ul class="space-y-1 px-4 lg:overflow-visible">
           <!-- 原导航项（保持不变） -->
           <li>
             <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
