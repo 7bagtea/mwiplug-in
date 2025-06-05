@@ -1109,6 +1109,7 @@ function handleNavClick(e) {
         // 移动端优化：确保弹窗在屏幕内
         if (window.innerWidth < 768) {
           modal.style.maxWidth = '100%';
+          modalContent.style.fontSize = clamp(8px, 2vw, 15px)；
         }
       }
 
