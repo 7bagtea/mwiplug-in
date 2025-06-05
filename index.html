@@ -1,9 +1,3 @@
-問題
-1.快速導航四個字沒切換成英文
-2.友情擴展沒法展開
-3.部分中文沒切換
-4.右側title切換英文後消失
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -351,23 +345,23 @@
       overscroll-behavior-y: contain; /* 防止滚动穿透 */
     }
 
-/* 自定义滚动条样式 - 仅应用于侧边栏和友情链接 */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px; /* 滚动条宽度 */
-}
+    /* 自定义滚动条样式 - 仅应用于侧边栏和友情链接 */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px; /* 滚动条宽度 */
+    }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 轨道背景 */
-}
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1; /* 轨道背景 */
+    }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #c1c1c1; /* 滑块背景 */
-  border-radius: 8px;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c1c1c1; /* 滑块背景 */
+      border-radius: 8px;
+    }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1; /* 滑块悬停效果 */
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1; /* 滑块悬停效果 */
+    }
 
 
   </style>
@@ -499,15 +493,6 @@
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
         <h1 id="pageTitle" class="text-2xl font-bold text-primary title-transition">MWI插件彙總</h1>
-        <!-- 新增语言切换按钮 -->
-        <div class="language-switcher flex items-center space-x-2">
-          <button id="zhToggle" class="px-3 py-1 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors">
-            <i class="fa-solid fa-language mr-1"></i>中文
-          </button>
-          <button id="enToggle" class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors">
-            English
-          </button>
-        </div>
       </div>
     </header>
 
@@ -875,502 +860,279 @@
   </div>
 
     <script>
-  // 侧边栏元素
-const sidebar = document.getElementById('sidebar');
-const openSidebarBtn = document.getElementById('openSidebar');
-const closeSidebarBtn = document.getElementById('closeSidebar');
-const overlay = document.getElementById('overlay');
-const pageTitle = document.getElementById('pageTitle');
-const friendLinks = document.getElementById('friendLinks');
-const submenuFriendLinks = document.getElementById('submenuFriendLinks');
+      // 侧边栏元素
+      const sidebar = document.getElementById('sidebar');
+      const openSidebarBtn = document.getElementById('openSidebar');
+      const closeSidebarBtn = document.getElementById('closeSidebar');
+      const overlay = document.getElementById('overlay');
+      const pageTitle = document.getElementById('pageTitle');
+      const friendLinks = document.getElementById('friendLinks');
+      const submenuFriendLinks = document.getElementById('submenuFriendLinks');
 
-// 全局变量
-let currentTargetUrl = '';
-let isModalOpen = false;
-let isSidebarOpen = false;
-let originalBodyPaddingRight = '';
+      // 全局变量
+      let currentTargetUrl = '';
+      let isModalOpen = false;
+      let isSidebarOpen = false;
+      let originalBodyPaddingRight = '';
 
-// 初始化
-document.addEventListener('DOMContentLoaded', () => {
-  // 修复：使用正确的选择器和事件委托
-  document.querySelectorAll('#sidebar .nav-item, #submenuFriendLinks a').forEach(link => {
-    link.addEventListener('click', handleNavClick);
-  });
-
-  // 初始化语言
-  initLanguage();
-
-  // 友情链接菜单展开/折叠
-  friendLinks.addEventListener('click', (e) => {
-    e.preventDefault();
-    friendLinks.classList.toggle('expanded');
-    setActiveNav(friendLinks);
-  });
-
-  // 子菜单导航项点击事件
-  document.querySelectorAll('#submenuFriendLinks a.external-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      currentTargetUrl = link.href;
-      isModalOpen = true;
-      showConfirmModal(link.href);
-    });
-  });
-
-  // 初始化第一个主导航项为活跃状态
-  const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
-  if (firstNavItem) {
-    setActiveNav(firstNavItem);
-    const navText = firstNavItem.querySelector('.nav-text').textContent;
-    pageTitle.textContent = navText;
-  }
-
-  // 汉堡菜单按钮打开侧边栏
-  if (openSidebarBtn) { // 添加存在检查
-    openSidebarBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openSidebar();
-    });
-  }
-
-  // 关闭按钮关闭侧边栏
-  if (closeSidebarBtn) { // 添加存在检查
-    closeSidebarBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeSidebar();
-    });
-  }
-
-  // 点击侧边栏外部关闭侧边栏（仅当弹窗未打开时）
-  if (overlay) { // 添加存在检查
-    overlay.addEventListener('click', (e) => {
-      if (!isModalOpen && isSidebarOpen) {
-        closeSidebar();
-      }
-    });
-  }
-
-  // 防止侧边栏内部点击触发外部关闭
-  if (sidebar) { // 添加存在检查
-    sidebar.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-  }
-
-  // 初始化外部链接弹窗（使用事件委托）
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('a.external-link[target="_blank"]');
-    if (link && !link.closest('#submenuFriendLinks')) {
-      e.preventDefault();
-      currentTargetUrl = link.href;
-      isModalOpen = true;
-      showConfirmModal(link.href);
-    }
-  });
-
-  // 移动端优化：点击导航项后自动关闭侧边栏
-  document.querySelectorAll('#sidebar a:not(.external-link)').forEach(navLink => {
-    navLink.addEventListener('click', () => {
-      if (window.innerWidth < 1024 && isSidebarOpen) {
-        setTimeout(closeSidebar, 300);
-      }
-    });
-  });
-
-  // 检测屏幕尺寸变化，调整侧边栏状态
-  window.addEventListener('resize', updateSidebarState);
-  updateSidebarState(); // 初始化状态
-});
-
-// 打开侧边栏
-function openSidebar() {
-  if (sidebar && overlay) {
-    sidebar.classList.remove('-translate-x-full');
-    overlay.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    isSidebarOpen = true;
-  }
-}
-
-// 关闭侧边栏
-function closeSidebar() {
-  if (sidebar && overlay) {
-    sidebar.classList.add('-translate-x-full');
-    overlay.classList.add('hidden');
-    document.body.style.overflow = '';
-    isSidebarOpen = false;
-  }
-}
-
-// 更新侧边栏状态（响应式）
-function updateSidebarState() {
-  if (window.innerWidth >= 1024) {
-    if (sidebar && overlay) {
-      sidebar.classList.remove('-translate-x-full');
-      overlay.classList.add('hidden');
-      document.body.style.overflow = '';
-      isSidebarOpen = true;
-    }
-  } else if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
-    if (overlay) {
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      isSidebarOpen = true;
-    }
-  } else {
-    isSidebarOpen = false;
-  }
-}
-
-// 处理导航项点击
-function handleNavClick(e) {
-  e.preventDefault();
-  
-  const link = e.currentTarget;
-  const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
-  const isExternal = link.classList.contains('external-link');
-
-  // 更新页面标题（仅对主导航项）
-  if (!isSubmenuLink && !isExternal) {
-    const navText = link.querySelector('.nav-text').textContent;
-    if (pageTitle) pageTitle.textContent = navText;
-  }
-
-  // 滚动到目标区域（仅对主导航项）
-  if (!isSubmenuLink && !isExternal) {
-    const href = link.getAttribute('href');
-    if (href) { // 添加检查
-      const targetId = href.substring(1);
-      const targetElement = document.getElementById(targetId);
-
-      if (targetElement) {
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const scrollTop = targetElement.offsetTop - headerHeight;
-
-        window.scrollTo({
-          top: scrollTop,
-          behavior: 'smooth'
+      // 初始化
+      document.addEventListener('DOMContentLoaded', () => {
+        // 修复：选择所有导航项（包括子菜单）
+        document.querySelectorAll('#sidebar .nav-item, #submenuFriendLinks a').forEach(link => {
+          link.addEventListener('click', handleNavClick);
         });
+
+        // 友情链接菜单展开/折叠
+        friendLinks.addEventListener('click', (e) => {
+          e.preventDefault();
+          friendLinks.classList.toggle('expanded');
+          setActiveNav(friendLinks);
+        });
+
+        // 子菜单导航项点击事件
+        document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isExternal = link.classList.contains('external-link');
+            
+            if (isExternal) {
+              currentTargetUrl = link.href;
+              isModalOpen = true;
+              showConfirmModal(link.href);
+            } else {
+              handleNavClick(e);
+              if (window.innerWidth < 1024 && isSidebarOpen) {
+                setTimeout(closeSidebar, 300);
+              }
+            }
+          });
+        });
+
+        // 初始化第一个主导航项为活跃状态
+        const firstNavItem = document.querySelector('#sidebar > nav > ul > li > a');
+        if (firstNavItem) {
+          setActiveNav(firstNavItem);
+          const navText = firstNavItem.querySelector('.nav-text').textContent;
+          pageTitle.textContent = navText;
+        }
+
+        // 汉堡菜单按钮打开侧边栏
+        openSidebarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openSidebar();
+        });
+
+        // 关闭按钮关闭侧边栏
+        closeSidebarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeSidebar();
+        });
+
+        // 点击侧边栏外部关闭侧边栏（仅当弹窗未打开时）
+        overlay.addEventListener('click', (e) => {
+          if (!isModalOpen && isSidebarOpen) {
+            closeSidebar();
+          }
+        });
+
+        // 防止侧边栏内部点击触发外部关闭
+        sidebar.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+
+        // 初始化外部链接弹窗（使用事件委托）
+        document.addEventListener('click', (e) => {
+          const link = e.target.closest('a.external-link[target="_blank"]');
+          if (link && !link.closest('#submenuFriendLinks')) {
+            e.preventDefault();
+            currentTargetUrl = link.href;
+            isModalOpen = true;
+            showConfirmModal(link.href);
+          }
+        });
+
+        // 移动端优化：点击导航项后自动关闭侧边栏
+        document.querySelectorAll('#sidebar a:not(.external-link)').forEach(navLink => {
+          navLink.addEventListener('click', () => {
+            if (window.innerWidth < 1024 && isSidebarOpen) {
+              setTimeout(closeSidebar, 300);
+            }
+          });
+        });
+
+        // 检测屏幕尺寸变化，调整侧边栏状态
+        window.addEventListener('resize', updateSidebarState);
+        updateSidebarState(); // 初始化状态
+      });
+
+      // 打开侧边栏
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        isSidebarOpen = true;
       }
-    }
-  }
 
-  // 设置活动导航项
-  setActiveNav(link);
-
-  // 处理友情链接菜单状态
-  if (link === friendLinks) {
-    friendLinks.classList.toggle('expanded');
-  } else if (isSubmenuLink) {
-    friendLinks.classList.add('expanded');
-  } else {
-    friendLinks.classList.remove('expanded');
-  }
-}
-
-// 设置导航项活跃状态
-function setActiveNav(activeElement) {
-  // 移除所有导航项的活跃状态
-  document.querySelectorAll('#sidebar .nav-item.active, #sidebar > nav > ul > li > a.active, #friendLinks.active').forEach(item => {
-    item.classList.remove('active');
-  });
-  document.querySelectorAll('#submenuFriendLinks a.active').forEach(item => {
-    item.classList.remove('active');
-  });
-
-  // 为当前导航项添加活跃状态
-  activeElement.classList.add('active');
-}
-
-// 计算滚动条宽度
-function getScrollbarWidth() {
-  const scrollDiv = document.createElement('div');
-  scrollDiv.style.width = '100px';
-  scrollDiv.style.height = '100px';
-  scrollDiv.style.overflow = 'scroll';
-  scrollDiv.style.position = 'absolute';
-  scrollDiv.style.top = '-9999px';
-  document.body.appendChild(scrollDiv);
-  const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-  return scrollbarWidth;
-}
-
-// 显示弹框函数
-function showConfirmModal(url) {
-  const linkUrlSpan = document.getElementById('linkUrl');
-  if (linkUrlSpan) linkUrlSpan.textContent = url;
-  
-  const modal = document.getElementById('confirmModal');
-  if (modal) {
-    modal.style.display = 'flex';
-    
-    // 保存原始的body内边距
-    originalBodyPaddingRight = document.body.style.paddingRight;
-    
-    // 检测是否有垂直滚动条
-    const hasVerticalScrollbar = document.body.scrollHeight > window.innerHeight;
-    
-    // 如果有滚动条，添加内边距以防止内容位移
-    if (hasVerticalScrollbar) {
-      const scrollbarWidth = getScrollbarWidth();
-      document.body.style.paddingRight = `${parseInt(getComputedStyle(document.body).paddingRight) + scrollbarWidth}px`;
-    }
-    
-    // 禁止页面滚动
-    document.body.style.overflow = 'hidden';
-    
-    // 移动端优化：确保弹窗在屏幕内
-    if (window.innerWidth < 768) {
-      modal.style.maxWidth = '90%';
-      modal.style.margin = '1rem auto';
-    }
-  }
-}
-
-// 隐藏弹框函数
-function hideConfirmModal() {
-  const modal = document.getElementById('confirmModal');
-  if (modal) {
-    modal.style.display = 'none';
-    
-    // 恢复原始的body内边距
-    document.body.style.paddingRight = originalBodyPaddingRight;
-    
-    // 恢复页面滚动
-    document.body.style.overflow = '';
-  }
-  
-  currentTargetUrl = '';
-  isModalOpen = false;
-}
-
-// 确认按钮点击事件
-document.getElementById('confirmBtn').addEventListener('click', () => {
-  if (currentTargetUrl) {
-    window.open(currentTargetUrl, '_blank');
-    hideConfirmModal();
-  }
-});
-
-// 取消按钮点击事件
-document.getElementById('cancelBtn').addEventListener('click', (e) => {
-  e.stopPropagation(); // 防止事件冒泡
-  hideConfirmModal();
-});
-
-// 点击背景区域关闭弹框
-document.getElementById('confirmModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('confirmModal')) {
-    hideConfirmModal();
-  } 
-});
-
-// 语言翻译数据对象
-const translations = {
-  zh: {
-    pageTitle: "MWI插件彙總",
-    // 侧边栏导航
-    navMWSummary: "MWI插件彙總",
-    navMustHave: "必裝系列",
-    navHighlyRecommended: "強烈推薦",
-    navToolsStatistics: "工具與統計",
-    navEconomicTrade: "經濟與交易",
-    navBattleEffects: "戰鬥與特效",
-    navFunUtils: "趣味與輔助",
-    navFriendLinks: "友情連結",
-    // 各部分标题
-    sectionMWSummary: "MWI插件彙總",
-    sectionMWSummaryDesc: "本頁面收集了MWI遊戲中各類實用插件，幫助您提升遊戲體驗。點擊左側導航可快速查看不同類別的插件。",
-    sectionMustHave: "必裝系列",
-    sectionHighlyRecommended: "強烈推薦",
-    sectionToolsStatistics: "工具與統計",
-    sectionEconomicTrade: "經濟與交易",
-    sectionBattleEffects: "戰鬥與特效",
-    sectionFunUtils: "趣味與輔助",
-    // 插件卡片
-    pluginTampermonkey: "Tampermonkey-油猴",
-    pluginTampermonkeyDesc: "網頁版裝插件必須裝這個",
-    pluginMWITools: "MWITools",
-    pluginMWIToolsDesc: "基礎功能增強，遊戲體驗優化",
-    // 页脚
-    footerTitle: "MWI插件彙總",
-    footerDesc: "為您提供MWI遊戲最佳插件體驗",
-    footerCopyright: "© 2025 MWI插件彙總 - 保留所有權利",
-    // 弹窗
-    confirmModalText: "即將打開外部連結",
-    confirmModalYes: "確認",
-    confirmModalNo: "取消"
-  },
-  en: {
-    pageTitle: "MWI Plugin Collection",
-    navMWSummary: "MWI Plugin Collection",
-    navMustHave: "Must-Have",
-    navHighlyRecommended: "Highly Recommended",
-    navToolsStatistics: "Tools & Statistics",
-    navEconomicTrade: "Economy & Trade",
-    navBattleEffects: "Battle & Effects",
-    navFunUtils: "Fun & Utilities",
-    navFriendLinks: "Friend Links",
-    sectionMWSummary: "MWI Plugin Collection",
-    sectionMWSummaryDesc: "This page collects various useful plugins for the MWI game to help enhance your gaming experience. Click the left navigation to quickly view plugins in different categories.",
-    sectionMustHave: "Must-Have",
-    sectionHighlyRecommended: "Highly Recommended",
-    sectionToolsStatistics: "Tools & Statistics",
-    sectionEconomicTrade: "Economy & Trade",
-    sectionBattleEffects: "Battle & Effects",
-    sectionFunUtils: "Fun & Utilities",
-    pluginTampermonkey: "Tampermonkey",
-    pluginTampermonkeyDesc: "Necessary for installing plugins on the web version",
-    pluginMWITools: "MWITools",
-    pluginMWIToolsDesc: "Basic function enhancement, gaming experience optimization",
-    footerTitle: "MWI Plugin Collection",
-    footerDesc: "Providing you with the best plugin experience for MWI games",
-    footerCopyright: "© 2025 MWI Plugin Collection - All Rights Reserved",
-    confirmModalText: "About to open an external link",
-    confirmModalYes: "Confirm",
-    confirmModalNo: "Cancel"
-  }
-};
-
-// 当前语言状态（默认中文）
-let currentLanguage = 'zh';
-
-// 初始化页面语言
-function initLanguage() {
-  updatePageLanguage(currentLanguage);
-  setupLanguageToggleEvents();
-}
-
-// 更新页面语言
-function updatePageLanguage(lang) {
-  currentLanguage = lang;
-  const trans = translations[lang];
-  
-  // 更新页面标题
-  const pageTitle = document.getElementById('pageTitle');
-  if (pageTitle) pageTitle.textContent = trans.pageTitle;
-  
-  // 更新侧边栏导航文本
-  const navItems = {
-    'mw-summary': 'navMWSummary',
-    'must-have': 'navMustHave',
-    'highly-recommended': 'navHighlyRecommended',
-    'tools-statistics': 'navToolsStatistics',
-    'economic-trade': 'navEconomicTrade',
-    'battle-effects': 'navBattleEffects',
-    'fun-utils': 'navFunUtils'
-  };
-  
-  for (const [sectionId, textKey] of Object.entries(navItems)) {
-    const navItem = document.querySelector(`[data-section="${sectionId}"] .nav-text`);
-    if (navItem) navItem.textContent = trans[textKey];
-  }
-  
-  // 修复：使用正确的选择器获取友情链接文本元素
-  const friendLinksText = document.querySelector('#friendLinks .nav-text');
-  if (friendLinksText) friendLinksText.textContent = trans.navFriendLinks;
-  
-  // 更新各部分标题
-  const sections = [
-    'mw-summary', 'must-have', 'highly-recommended', 
-    'tools-statistics', 'economic-trade', 'battle-effects', 'fun-utils'
-  ];
-  
-  sections.forEach(sectionId => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      const title = section.querySelector('h2');
-      if (title) title.textContent = trans[`section${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}`];
-      
-      // 更新描述（仅针对mw-summary）
-      if (sectionId === 'mw-summary') {
-        const desc = section.querySelector('p');
-        if (desc) desc.textContent = trans.sectionMWSummaryDesc;
+      // 关闭侧边栏
+      function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        isSidebarOpen = false;
       }
-    }
-  });
-  
-  // 更新插件卡片文本（示例，需根据实际ID或类名调整）
-  const pluginCards = {
-    'tampermonkey': { 
-      selector: '#must-have .plugin-card:first-child',
-      title: 'pluginTampermonkey',
-      desc: 'pluginTampermonkeyDesc'
-    },
-    'mwitools': { 
-      selector: '#must-have .plugin-card:nth-child(2)',
-      title: 'pluginMWITools',
-      desc: 'pluginMWIToolsDesc'
-    }
-  };
-  
-  for (const [, card] of Object.entries(pluginCards)) {
-    const cardElement = document.querySelector(card.selector);
-    if (cardElement) {
-      const title = cardElement.querySelector('h3');
-      const desc = cardElement.querySelector('p');
-      
-      if (title) title.textContent = trans[card.title];
-      if (desc) desc.textContent = trans[card.desc];
-    }
-  }
-  
-  // 更新页脚文本
-  const footer = document.querySelector('footer');
-  if (footer) {
-    const footerTitle = footer.querySelector('h3');
-    const footerDesc = footer.querySelector('p.text-gray-400');
-    const footerCopyright = footer.querySelector('p.text-gray-500');
-    
-    if (footerTitle) footerTitle.textContent = trans.footerTitle;
-    if (footerDesc) footerDesc.textContent = trans.footerDesc;
-    if (footerCopyright) footerCopyright.textContent = trans.footerCopyright;
-  }
-  
-  // 更新弹窗文本
-  const modal = document.getElementById('confirmModal');
-  if (modal) {
-    const modalText = modal.querySelector('.modal-content p:first-child');
-    const confirmBtn = document.getElementById('confirmBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    
-    if (modalText) modalText.innerHTML = `${trans.confirmModalText}<br><span id="linkUrl" class="link-pre"></span><br>是否確認繼續？`;
-    if (confirmBtn) confirmBtn.textContent = trans.confirmModalYes;
-    if (cancelBtn) cancelBtn.textContent = trans.confirmModalNo;
-  }
-  
-  // 更新HTML语言属性
-  document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
-}
 
-// 设置语言切换按钮事件
-function setupLanguageToggleEvents() {
-  const zhToggle = document.querySelector('#zhToggle');
-  const enToggle = document.querySelector('#enToggle');
-  
-  if (zhToggle && enToggle) {
-    zhToggle.addEventListener('click', () => {
-      if (currentLanguage !== 'zh') {
-        updatePageLanguage('zh');
-        zhToggle.classList.add('bg-primary', 'text-white');
-        zhToggle.classList.remove('bg-gray-200', 'text-gray-700');
-        enToggle.classList.add('bg-gray-200', 'text-gray-700');
-        enToggle.classList.remove('bg-primary', 'text-white');
+      // 更新侧边栏状态（响应式）
+      function updateSidebarState() {
+        if (window.innerWidth >= 1024) {
+          sidebar.classList.remove('-translate-x-full');
+          overlay.classList.add('hidden');
+          document.body.style.overflow = '';
+          isSidebarOpen = true;
+        } else if (!sidebar.classList.contains('-translate-x-full')) {
+          overlay.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          isSidebarOpen = true;
+        } else {
+          isSidebarOpen = false;
+        }
       }
-    });
-    
-    enToggle.addEventListener('click', () => {
-      if (currentLanguage !== 'en') {
-        updatePageLanguage('en');
-        enToggle.classList.add('bg-primary', 'text-white');
-        enToggle.classList.remove('bg-gray-200', 'text-gray-700');
-        zhToggle.classList.add('bg-gray-200', 'text-gray-700');
-        zhToggle.classList.remove('bg-primary', 'text-white');
+
+      // 处理导航项点击
+      function handleNavClick(e) {
+        e.preventDefault();
+        
+        const link = e.currentTarget;
+        const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
+        const isExternal = link.classList.contains('external-link');
+
+        // 更新页面标题（仅对主导航项）
+        if (!isSubmenuLink && !isExternal) {
+          const navText = link.querySelector('.nav-text').textContent;
+          pageTitle.textContent = navText;
+        }
+
+        // 滚动到目标区域（仅对主导航项）
+        if (!isSubmenuLink && !isExternal) {
+          const targetId = link.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+
+          if (targetElement) {
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const scrollTop = targetElement.offsetTop - headerHeight;
+
+            window.scrollTo({
+              top: scrollTop,
+              behavior: 'smooth'
+            });
+          }
+        }
+
+        // 设置活动导航项
+        setActiveNav(link);
+
+        // 处理友情链接菜单状态
+        if (link === friendLinks) {
+          friendLinks.classList.toggle('expanded');
+        } else if (isSubmenuLink) {
+          friendLinks.classList.add('expanded');
+        } else {
+          friendLinks.classList.remove('expanded');
+        }
       }
-    });
-  }
-}
+
+      // 设置导航项活跃状态
+      function setActiveNav(activeElement) {
+        // 移除所有导航项的活跃状态
+        document.querySelectorAll('#sidebar .nav-item.active, #sidebar > nav > ul > li > a.active, #friendLinks.active').forEach(item => {
+          item.classList.remove('active');
+        });
+        document.querySelectorAll('#submenuFriendLinks a.active').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        // 为当前导航项添加活跃状态
+        activeElement.classList.add('active');
+      }
+
+      // 计算滚动条宽度
+      function getScrollbarWidth() {
+        const scrollDiv = document.createElement('div');
+        scrollDiv.style.width = '100px';
+        scrollDiv.style.height = '100px';
+        scrollDiv.style.overflow = 'scroll';
+        scrollDiv.style.position = 'absolute';
+        scrollDiv.style.top = '-9999px';
+        document.body.appendChild(scrollDiv);
+        const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv);
+        return scrollbarWidth;
+      }
+
+      // 显示弹框函数
+      function showConfirmModal(url) {
+        const linkUrlSpan = document.getElementById('linkUrl');
+        linkUrlSpan.textContent = url;
+        
+        const modal = document.getElementById('confirmModal');
+        modal.style.display = 'flex';
+        
+        // 保存原始的body内边距
+        originalBodyPaddingRight = document.body.style.paddingRight;
+        
+        // 检测是否有垂直滚动条
+        const hasVerticalScrollbar = document.body.scrollHeight > window.innerHeight;
+        
+        // 如果有滚动条，添加内边距以防止内容位移
+        if (hasVerticalScrollbar) {
+          const scrollbarWidth = getScrollbarWidth();
+          document.body.style.paddingRight = `${parseInt(getComputedStyle(document.body).paddingRight) + scrollbarWidth}px`;
+        }
+        
+        // 禁止页面滚动
+        document.body.style.overflow = 'hidden';
+        
+        // 移动端优化：确保弹窗在屏幕内
+        if (window.innerWidth < 768) {
+          modal.style.maxWidth = '90%';
+          modal.style.margin = '1rem auto';
+        }
+      }
+
+      // 隐藏弹框函数
+      function hideConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        modal.style.display = 'none';
+        
+        // 恢复原始的body内边距
+        document.body.style.paddingRight = originalBodyPaddingRight;
+        
+        // 恢复页面滚动
+        document.body.style.overflow = '';
+        
+        currentTargetUrl = '';
+        isModalOpen = false;
+      }
+
+      // 确认按钮点击事件
+      document.getElementById('confirmBtn').addEventListener('click', () => {
+        if (currentTargetUrl) {
+          window.open(currentTargetUrl, '_blank');
+          hideConfirmModal();
+        }
+      });
+
+      // 取消按钮点击事件
+      document.getElementById('cancelBtn').addEventListener('click', (e) => {
+        e.stopPropagation(); // 防止事件冒泡
+        hideConfirmModal();
+      });
+
+      // 点击背景区域关闭弹框
+      document.getElementById('confirmModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('confirmModal')) {
+          hideConfirmModal();
+        } 
+      });
 
     </script>
   </body>
