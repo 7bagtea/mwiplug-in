@@ -359,9 +359,9 @@
       border-radius: 8px;
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #a1a1a1; /* 滑块悬停效果 */
-    }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1; /* 滑块悬停效果 */
+}
 
 
   </style>
@@ -1004,6 +1004,11 @@
         const link = e.currentTarget;
         const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
         const isExternal = link.classList.contains('external-link');
+
+        // 新增：检查href是否存在且有效
+        if (!href || href === '#') {
+          return;
+        }
 
         // 更新页面标题（仅对主导航项）
         if (!isSubmenuLink && !isExternal) {
