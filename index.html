@@ -998,52 +998,64 @@
       }
 
       // 处理导航项点击
-      function handleNavClick(e) {
-        e.preventDefault();
-        
-        const link = e.currentTarget;
-        const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
-        const isExternal = link.classList.contains('external-link');
+// 处理导航项点击
+function handleNavClick(e) {
+  e.preventDefault();
+  
+  const link = e.currentTarget;
+  const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
+  const isExternal = link.classList.contains('external-link');
+  let href = null;
+  
+  // 确保只处理有href属性的<a>标签
+  if (link.tagName === 'A') {
+    href = link.getAttribute('href');
+    
+    // 忽略空链接或JavaScript链接
+    if (!href || href === '#' || href.startsWith('javascript:')) {
+      return;
+    }
+  } else {
+    // 如果不是<a>标签（如友情链接的<div>），直接返回
+    if (!isSubmenuLink) {
+      return;
+    }
+  }
 
-        // 新增：检查href是否存在且有效
-        if (!href || href === '#') {
-          return;
-        }
+  // 更新页面标题（仅对主导航项）
+  if (!isSubmenuLink && !isExternal && link.querySelector('.nav-text')) {
+    const navText = link.querySelector('.nav-text').textContent;
+    pageTitle.textContent = navText;
+  }
 
-        // 更新页面标题（仅对主导航项）
-        if (!isSubmenuLink && !isExternal) {
-          const navText = link.querySelector('.nav-text').textContent;
-          pageTitle.textContent = navText;
-        }
+  // 滚动到目标区域（仅对有href的主导航项）
+  if (href && href.startsWith('#') && !isSubmenuLink && !isExternal) {
+    const targetId = href.substring(1);
+    const targetElement = document.getElementById(targetId);
 
-        // 滚动到目标区域（仅对主导航项）
-        if (!isSubmenuLink && !isExternal) {
-          const targetId = link.getAttribute('href').substring(1);
-          const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      const headerHeight = document.querySelector('header').offsetHeight;
+      const scrollTop = targetElement.offsetTop - headerHeight;
 
-          if (targetElement) {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const scrollTop = targetElement.offsetTop - headerHeight;
+      window.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth'
+      });
+    }
+  }
 
-            window.scrollTo({
-              top: scrollTop,
-              behavior: 'smooth'
-            });
-          }
-        }
+  // 设置活动导航项
+  setActiveNav(link);
 
-        // 设置活动导航项
-        setActiveNav(link);
-
-        // 处理友情链接菜单状态
-        if (link === friendLinks) {
-          friendLinks.classList.toggle('expanded');
-        } else if (isSubmenuLink) {
-          friendLinks.classList.add('expanded');
-        } else {
-          friendLinks.classList.remove('expanded');
-        }
-      }
+  // 处理友情链接菜单状态
+  if (link === friendLinks) {
+    friendLinks.classList.toggle('expanded');
+  } else if (isSubmenuLink) {
+    friendLinks.classList.add('expanded');
+  } else {
+    friendLinks.classList.remove('expanded');
+  }
+}
 
       // 设置导航项活跃状态
       function setActiveNav(activeElement) {
