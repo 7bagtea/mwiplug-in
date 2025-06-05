@@ -269,21 +269,21 @@
         padding: 2rem 1.5rem; /* 减少左右内边距，适应小屏幕 */
         border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        max-width: 100%; /* 在小屏幕上使用更大的宽度百分比 */
-        width: 320px;
+        max-width: 400px; /* 在小屏幕上使用更大的宽度百分比 */
+        width: 100%;
         text-align: center;
         margin: 1rem; /* 添加边距，避免紧贴屏幕边缘 */
     }
 
     /* 友情連結網址超出格子問題 */
     .link-pre {
-        font-family: inherit;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        max-width: 100%;
-        margin: 0.5rem 0;
-        padding: 0.3rem 0;
-        line-height: 1.8rem;
+      font-family: inherit;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.3rem 0;
+      line-height: 1.8rem;
     }
 
     /* 按钮样式 */
@@ -328,9 +328,9 @@
 
     /* 移动端优化 */
     @media (max-width: 768px) {
-        /* 侧边栏Flex容器高度 */
-        #sidebar .flex-col {
-          height: 100vh;
+      /* 侧边栏Flex容器高度 */
+      #sidebar .flex-col {
+        height: 100vh;
       }
     }
 
@@ -345,19 +345,19 @@
       overscroll-behavior-y: contain; /* 防止滚动穿透 */
     }
 
-/* 自定义滚动条样式 - 仅应用于侧边栏和友情链接 */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px; /* 滚动条宽度 */
-}
+    /* 自定义滚动条样式 - 仅应用于侧边栏和友情链接 */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px; /* 滚动条宽度 */
+    }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 轨道背景 */
-}
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1; /* 轨道背景 */
+    }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #c1c1c1; /* 滑块背景 */
-  border-radius: 8px;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c1c1c1; /* 滑块背景 */
+      border-radius: 8px;
+    }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1; /* 滑块悬停效果 */
@@ -1004,6 +1004,11 @@
         const link = e.currentTarget;
         const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
         const isExternal = link.classList.contains('external-link');
+
+        // 新增：检查href是否存在且有效
+        if (!href || href === '#') {
+          return;
+        }
 
         // 更新页面标题（仅对主导航项）
         if (!isSubmenuLink && !isExternal) {
