@@ -324,17 +324,50 @@
       }
     }
 
-    /* 移动端优化 */
-    @media (max-width: 768px) {
-      /* 侧边栏Flex容器高度 */
-      #sidebar .flex-col {
-        height: 100vh;
-      }
+    /* 侧边栏整体布局 */
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    /* 侧边栏Flex布局核心样式 */
-    .flex-1 {
-      flex: 1; /* 自动填充剩余空间 */
+    /* 导航区域 - 唯一的滚动容器 */
+    nav {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      padding: 1rem;
+    }
+
+    /* 自定义滚动条样式 */
+    nav::-webkit-scrollbar, 
+    .submenu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    nav::-webkit-scrollbar-track,
+    .submenu::-webkit-scrollbar-track {
+
+      background: #f1f1f1;
+    }
+
+    nav::-webkit-scrollbar-thumb,
+    .submenu::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 8px;
+    }
+
+    nav::-webkit-scrollbar-thumb:hover,
+    .submenu::-webkit-scrollbar-thumb:hove {
+      background: #a1a1a1;
+    }
+
+    /* 移动端优化 */
+    @media (max-width: 768px) {
+      nav {
+        max-height: calc(100vh - 100px);
+      }
     }
 
     /* 优化滚动体验 */
@@ -343,144 +376,123 @@
       overscroll-behavior-y: contain; /* 防止滚动穿透 */
     }
 
-    /* 自定义滚动条样式 - 仅应用于侧边栏和友情链接 */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px; /* 滚动条宽度 */
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f1f1; /* 轨道背景 */
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #c1c1c1; /* 滑块背景 */
-      border-radius: 8px;
-    }
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1; /* 滑块悬停效果 */
-}
-
-
   </style>
 </head>
 
 <body class="bg-light text-dark smooth-scroll">
   <!-- 側邊欄 -->
   <div id="sidebar" class="fixed h-full w-64 bg-white sidebar-shadow z-30 transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full">
-    <!-- 新增Flex容器，用于垂直布局 -->
-    <div class="flex flex-col h-full">
-      <!-- 原侧边栏头部（保持不变） -->
-      <div class="p-4 flex justify-between items-center border-b">
-        <div class="lg:hidden w-3 h-5 flex-shrink-0">
-        </div>
-        <h2 class="text-xl font-bold text-primary mx-auto" style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 20px; border-radius: 8px;">
-          <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;font-size: 24px;"></i>快速導航
-        </h2>
-        <button id="closeSidebar" class="lg:hidden w-3 h-5 text-gray-500 hover:text-primary transition-colors">
-          <i class="fa-solid fa-times"></i>
-        </button>
+    <!-- 原侧边栏头部（保持不变） -->
+    <div class="p-4 flex justify-between items-center border-b">
+      <div class="lg:hidden w-3 h-5 flex-shrink-0">
       </div>
-      
-      <!-- 原导航区域，修改为Flex自动填充空间 -->
-      <nav class="py-4 flex-1 overflow-y-auto custom-scrollbar">
-        <ul class="space-y-1 px-4 lg:overflow-visible">
-          <!-- 原导航项（保持不变） -->
-          <li>
-            <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
-              <span class="nav-icon">
-                <i class="fa-solid fa-sitemap text-primary"></i>
-              </span>
-              <span class="nav-text">MWI插件彙總</span>
-            </a>
-          </li>
-          <!-- 以下导航项保持不变，省略重复内容 -->
-          <li>
-            <a href="#must-have" class="nav-item" data-section="must-have">
-              <span class="nav-icon">
-                <i class="fa-solid fa-star text-yellow-500"></i>
-              </span>
-              <span class="nav-text">必裝系列</span>
-            </a>
-          </li>
-          <li>
-            <a href="#highly-recommended" class="nav-item" data-section="highly-recommended">
-              <span class="nav-icon">
-                <i class="fa-solid fa-fire text-accent"></i>
-              </span>
-              <span class="nav-text">強烈推薦</span>
-            </a>
-          </li>
-          <li>
-            <a href="#tools-statistics" class="nav-item" data-section="tools-statistics">
-              <span class="nav-icon">
-                <i class="fa-solid fa-wrench text-blue-500"></i>
-              </span>
-              <span class="nav-text">工具與統計</span>
-            </a>
-          </li>
-          <li>
-            <a href="#economic-trade" class="nav-item" data-section="economic-trade">
-              <span class="nav-icon">
-                <i class="fa-solid fa-coins text-yellow-500"></i>
-              </span>
-              <span class="nav-text">經濟與交易</span>
-            </a>
-          </li>
-          <li>
-            <a href="#battle-effects" class="nav-item" data-section="battle-effects">
-              <span class="nav-icon">
-                <i class="fas fa-shield-alt" style="color: #EF4444;"></i>
-              </span>
-              <span class="nav-text">戰鬥與特效</span>
-            </a>
-          </li>
-          <li>
-            <a href="#fun-utils" class="nav-item" data-section="fun-utils">
-              <span class="nav-icon">
-                <i class="fa-solid fa-smile text-green-500"></i>
-              </span>
-              <span class="nav-text">趣味與輔助</span>
-            </a>
-          </li>
-          <li>
-            <div class="nav-item" id="friendLinks">
-              <span class="nav-icon">
-                <i class="fa-solid fa-link text-gray-600"></i>
-              </span>
-              <span class="nav-text">友情連結</span>
-              <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
-            </div>
-            <div class="submenu custom-scrollbar" id="submenuFriendLinks">
-              <!-- 关键修改：添加 external-link 类 -->
-              <a href="https://www.gityx.com/" target="_blank" title="Git遊戲官方網站" class="external-link">
-                <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
-              </a>
-              <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank" title="牛牛收益站數據面板" class="external-link">
-                <i class="fa-solid fa-chart-line mr-2 text-accent"></i>牛牛收益站
-              </a>
-              <a href="https://sporkslinger.github.io/market-tracker-mwi/#/dashboard" target="_blank" title="牛牛股市行情跟蹤"
-                class="external-link">
-                <i class="fa-solid fa-sack-dollar mr-2 text-yellow-500"></i>牛牛股市
-              </a>
-              <a href="https://www.torn.com/2719800" target="_blank" title="辣雞薇的Torn City個人頁面" class="external-link">
-                <i class="fa-solid fa-paw mr-2" style="color: #6843d6;"></i>辣雞薇
-              </a>
-            </div>
-          </li>
-          <!-- 其他导航项... -->
-          <li class="mt-4">
-            <div style="font-size: 18px; color: black; padding: 10px;" 
-              onmouseover="this.style.color='red'; this.style.fontWeight='bold'"
-              onmouseout="this.style.color='black'; this.style.fontWeight='normal'">
-              <br>
-              迫於辣雞薇的脅迫,只好加上了她的Torn City連結
-            </div>
-          </li>
-        </ul>
-      </nav>
+      <h2 class="text-xl font-bold text-primary mx-auto" style="font-size: 24px; font-family: 'Rampart One', sans-serif; background-color: rgba(240, 174, 72, 0.8); color: black; padding: 4px 20px; border-radius: 8px;">
+        <i class="fa-solid fa-mug-hot mr-2" style="color: #A5673F;font-size: 24px;"></i>快速導航
+      </h2>
+      <button id="closeSidebar" class="lg:hidden w-3 h-5 text-gray-500 hover:text-primary transition-colors">
+        <i class="fa-solid fa-times"></i>
+      </button>
     </div>
+    
+    <!-- 原导航区域，修改为Flex自动填充空间 -->
+    <nav class="py-4 flex-1 overflow-y-auto">
+      <ul class="space-y-1 px-3 lg:overflow-visible">
+        <!-- 原导航项（保持不变） -->
+        <li>
+          <a href="#mw-summary" class="nav-item active" data-section="mw-summary">
+            <span class="nav-icon">
+              <i class="fa-solid fa-sitemap text-primary"></i>
+            </span>
+            <span class="nav-text">MWI插件彙總</span>
+          </a>
+        </li>
+        <!-- 以下导航项保持不变，省略重复内容 -->
+        <li>
+          <a href="#must-have" class="nav-item" data-section="must-have">
+            <span class="nav-icon">
+              <i class="fa-solid fa-star text-yellow-500"></i>
+            </span>
+            <span class="nav-text">必裝系列</span>
+          </a>
+        </li>
+        <li>
+          <a href="#highly-recommended" class="nav-item" data-section="highly-recommended">
+            <span class="nav-icon">
+              <i class="fa-solid fa-fire text-accent"></i>
+            </span>
+            <span class="nav-text">強烈推薦</span>
+          </a>
+        </li>
+        <li>
+          <a href="#tools-statistics" class="nav-item" data-section="tools-statistics">
+            <span class="nav-icon">
+              <i class="fa-solid fa-wrench text-blue-500"></i>
+            </span>
+            <span class="nav-text">工具與統計</span>
+          </a>
+        </li>
+        <li>
+          <a href="#economic-trade" class="nav-item" data-section="economic-trade">
+            <span class="nav-icon">
+              <i class="fa-solid fa-coins text-yellow-500"></i>
+            </span>
+            <span class="nav-text">經濟與交易</span>
+          </a>
+        </li>
+        <li>
+          <a href="#battle-effects" class="nav-item" data-section="battle-effects">
+            <span class="nav-icon">
+              <i class="fas fa-shield-alt" style="color: #EF4444;"></i>
+            </span>
+            <span class="nav-text">戰鬥與特效</span>
+          </a>
+        </li>
+        <li>
+          <a href="#fun-utils" class="nav-item" data-section="fun-utils">
+            <span class="nav-icon">
+              <i class="fa-solid fa-smile text-green-500"></i>
+            </span>
+            <span class="nav-text">趣味與輔助</span>
+          </a>
+        </li>
+        <li>
+          <div class="nav-item" id="friendLinks">
+            <span class="nav-icon">
+              <i class="fa-solid fa-link text-gray-600"></i>
+            </span>
+            <span class="nav-text">友情連結</span>
+            <i class="fa-solid fa-chevron-right ml-auto text-xs text-gray-400"></i>
+          </div>
+          <div class="submenu" id="submenuFriendLinks">
+            <!-- 关键修改：添加 external-link 类 -->
+            <a href="https://www.gityx.com/" target="_blank" title="Git遊戲官方網站" class="external-link">
+              <i class="fa-solid fa-gamepad mr-2 text-primary"></i>Git遊戲
+            </a>
+            <a href="https://milkonomy.pages.dev/#/dashboard" target="_blank" title="牛牛收益站數據面板" class="external-link">
+              <i class="fa-solid fa-chart-line mr-2 text-accent"></i>牛牛收益站
+            </a>
+            <a href="https://sporkslinger.github.io/market-tracker-mwi/#/dashboard" target="_blank" title="牛牛股市行情跟蹤"
+              class="external-link">
+              <i class="fa-solid fa-sack-dollar mr-2 text-yellow-500"></i>牛牛股市
+            </a>
+            <a href="https://www.torn.com/2719800" target="_blank" title="辣雞薇的Torn City個人頁面" class="external-link">
+              <i class="fa-solid fa-paw mr-2" style="color: #6843d6;"></i>辣雞薇
+            </a>
+          </div>
+        </li>
+        <!-- 其他导航项... -->
+        <li class="mt-4">
+          <div style="font-size: 18px; color: black; padding: 10px;" 
+            onmouseover="this.style.color='red'; this.style.fontWeight='bold'"
+            onmouseout="this.style.color='black'; this.style.fontWeight='normal'">
+            <br>
+            迫於辣雞薇的脅迫,只好加上了她的Torn City連結
+          </div>
+        </li>
+      </ul>
+    </nav>
   </div>
+
 
   <!-- 主內容 -->
   <div class="lg:ml-64 min-h-screen transition-all duration-300">
@@ -544,7 +556,6 @@
               <i class="fa-solid fa-link mr-2"></i>訪問地址
             </a>
           </div>
-        </div>
       </section>
 
       <!-- 強烈推薦 -->
@@ -996,64 +1007,63 @@
       }
 
       // 处理导航项点击
-// 处理导航项点击
-function handleNavClick(e) {
-  e.preventDefault();
-  
-  const link = e.currentTarget;
-  const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
-  const isExternal = link.classList.contains('external-link');
-  let href = null;
-  
-  // 确保只处理有href属性的<a>标签
-  if (link.tagName === 'A') {
-    href = link.getAttribute('href');
-    
-    // 忽略空链接或JavaScript链接
-    if (!href || href === '#' || href.startsWith('javascript:')) {
-      return;
-    }
-  } else {
-    // 如果不是<a>标签（如友情链接的<div>），直接返回
-    if (!isSubmenuLink) {
-      return;
-    }
-  }
+      function handleNavClick(e) {
+        e.preventDefault();
+        
+        const link = e.currentTarget;
+        const isSubmenuLink = link.closest('#submenuFriendLinks') !== null;
+        const isExternal = link.classList.contains('external-link');
+        let href = null;
+        
+        // 确保只处理有href属性的<a>标签
+        if (link.tagName === 'A') {
+          href = link.getAttribute('href');
+          
+          // 忽略空链接或JavaScript链接
+          if (!href || href === '#' || href.startsWith('javascript:')) {
+            return;
+          }
+        } else {
+          // 如果不是<a>标签（如友情链接的<div>），直接返回
+          if (!isSubmenuLink) {
+            return;
+          }
+        }
 
-  // 更新页面标题（仅对主导航项）
-  if (!isSubmenuLink && !isExternal && link.querySelector('.nav-text')) {
-    const navText = link.querySelector('.nav-text').textContent;
-    pageTitle.textContent = navText;
-  }
+        // 更新页面标题（仅对主导航项）
+        if (!isSubmenuLink && !isExternal && link.querySelector('.nav-text')) {
+          const navText = link.querySelector('.nav-text').textContent;
+          pageTitle.textContent = navText;
+        }
 
-  // 滚动到目标区域（仅对有href的主导航项）
-  if (href && href.startsWith('#') && !isSubmenuLink && !isExternal) {
-    const targetId = href.substring(1);
-    const targetElement = document.getElementById(targetId);
+        // 滚动到目标区域（仅对有href的主导航项）
+        if (href && href.startsWith('#') && !isSubmenuLink && !isExternal) {
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
 
-    if (targetElement) {
-      const headerHeight = document.querySelector('header').offsetHeight;
-      const scrollTop = targetElement.offsetTop - headerHeight;
+          if (targetElement) {
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const scrollTop = targetElement.offsetTop - headerHeight;
 
-      window.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    }
-  }
+            window.scrollTo({
+              top: scrollTop,
+              behavior: 'smooth'
+            });
+          }
+        }
 
-  // 设置活动导航项
-  setActiveNav(link);
+        // 设置活动导航项
+        setActiveNav(link);
 
-  // 处理友情链接菜单状态
-  if (link === friendLinks) {
-    friendLinks.classList.toggle('expanded');
-  } else if (isSubmenuLink) {
-    friendLinks.classList.add('expanded');
-  } else {
-    friendLinks.classList.remove('expanded');
-  }
-}
+        // 处理友情链接菜单状态
+        if (link === friendLinks) {
+          friendLinks.classList.toggle('expanded');
+        } else if (isSubmenuLink) {
+          friendLinks.classList.add('expanded');
+        } else {
+          friendLinks.classList.remove('expanded');
+        }
+      }
 
       // 设置导航项活跃状态
       function setActiveNav(activeElement) {
@@ -1149,6 +1159,6 @@ function handleNavClick(e) {
         } 
       });
 
-    </script>javascript:void(0);
+    </script>
   </body>
 </html>
