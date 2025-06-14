@@ -911,15 +911,30 @@
       const friendLinks = document.getElementById('friendLinks');
       const submenuFriendLinks = document.getElementById('submenuFriendLinks');
 
+      // 语言切换元素
+      const zhToggle = document.getElementById('zhToggle');
+      const enToggle = document.getElementById('enToggle');
+
       // 全局变量
       let currentTargetUrl = '';
       let isModalOpen = false;
       let isSidebarOpen = false;
       let originalBodyPaddingRight = '';
+      let currentLanguage = 'zh'; // 新增语言状态变量
 
       // 初始化
       document.addEventListener('DOMContentLoaded', () => {
-        // 修复：选择所有导航项（包括子菜单）
+        // 初始化导航和侧边栏
+        initNavigation();
+        // 初始化语言切换
+        initLanguageToggle();
+        // 初始化响应式处理
+        initResponsiveHandling();
+      });
+
+      // 初始化导航和侧边栏
+      function initNavigation() {
+        // 选择所有导航项（包括子菜单）
         document.querySelectorAll('#sidebar .nav-item, #submenuFriendLinks a').forEach(link => {
           link.addEventListener('click', handleNavClick);
         });
@@ -927,6 +942,7 @@
         // 友情链接菜单展开/折叠
         friendLinks.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation(); // 防止事件冒泡到侧边栏
           friendLinks.classList.toggle('expanded');
           setActiveNav(friendLinks);
         });
@@ -935,6 +951,8 @@
         document.querySelectorAll('#submenuFriendLinks a').forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation(); // 防止事件冒泡到侧边栏
+            
             const isExternal = link.classList.contains('external-link');
             
             if (isExternal) {
@@ -943,6 +961,7 @@
               showConfirmModal(link.href);
             } else {
               handleNavClick(e);
+              // 移动端点击导航后关闭侧边栏
               if (window.innerWidth < 1024 && isSidebarOpen) {
                 setTimeout(closeSidebar, 300);
               }
@@ -970,7 +989,7 @@
           closeSidebar();
         });
 
-        // 点击侧边栏外部关闭侧边栏（仅当弹窗未打开时）
+        // 点击侧边栏外部关闭侧边栏
         overlay.addEventListener('click', (e) => {
           if (!isModalOpen && isSidebarOpen) {
             closeSidebar();
@@ -982,7 +1001,7 @@
           e.stopPropagation();
         });
 
-        // 初始化外部链接弹窗（使用事件委托）
+        // 初始化外部链接弹窗
         document.addEventListener('click', (e) => {
           const link = e.target.closest('a.external-link[target="_blank"]');
           if (link && !link.closest('#submenuFriendLinks')) {
@@ -992,20 +1011,51 @@
             showConfirmModal(link.href);
           }
         });
+      }
 
-        // 移动端优化：点击导航项后自动关闭侧边栏
-        document.querySelectorAll('#sidebar a:not(.external-link)').forEach(navLink => {
-          navLink.addEventListener('click', () => {
-            if (window.innerWidth < 1024 && isSidebarOpen) {
-              setTimeout(closeSidebar, 300);
-            }
-          });
+      // 初始化语言切换
+      function initLanguageToggle() {
+        // 默认中文按钮为激活状态
+        zhToggle.classList.add('active');
+        
+        // 检查localStorage中的语言偏好
+        const savedLanguage = localStorage.getItem('mwiLanguage');
+        if (savedLanguage === 'en') {
+          setLanguage('en');
+          currentLanguage = 'en';
+          enToggle.classList.add('active');
+          zhToggle.classList.remove('active');
+        }
+
+        // 中文按钮点击事件
+        zhToggle.addEventListener('click', (e) => {
+          e.stopPropagation(); // 防止触发侧边栏关闭
+          if (currentLanguage !== 'zh') {
+            setLanguage('zh');
+            currentLanguage = 'zh';
+            zhToggle.classList.add('active');
+            enToggle.classList.remove('active');
+          }
         });
+        
+        // 英文按钮点击事件
+        enToggle.addEventListener('click', (e) => {
+          e.stopPropagation(); // 防止触发侧边栏关闭
+          if (currentLanguage !== 'en') {
+            setLanguage('en');
+            currentLanguage = 'en';
+            enToggle.classList.add('active');
+            zhToggle.classList.remove('active');
+          }
+        });
+      }
 
+      // 初始化响应式处理
+      function initResponsiveHandling() {
         // 检测屏幕尺寸变化，调整侧边栏状态
         window.addEventListener('resize', updateSidebarState);
         updateSidebarState(); // 初始化状态
-      });
+      }
 
       // 打开侧边栏
       function openSidebar() {
@@ -1057,19 +1107,18 @@
             return;
           }
         } else {
-          // 如果不是<a>标签（如友情链接的<div>），直接返回
           if (!isSubmenuLink) {
             return;
           }
         }
 
-        // 更新页面标题（仅对主导航项）
+        // 更新页面标题
         if (!isSubmenuLink && !isExternal && link.querySelector('.nav-text')) {
           const navText = link.querySelector('.nav-text').textContent;
           pageTitle.textContent = navText;
         }
 
-        // 滚动到目标区域（仅对有href的主导航项）
+        // 滚动到目标区域
         if (href && href.startsWith('#') && !isSubmenuLink && !isExternal) {
           const targetId = href.substring(1);
           const targetElement = document.getElementById(targetId);
@@ -1132,7 +1181,6 @@
         linkUrlSpan.textContent = url;
         
         const modal = document.getElementById('confirmModal');
-        // modal.style.display = 'flex';
         
         // 保存原始的body内边距
         originalBodyPaddingRight = document.body.style.paddingRight;
@@ -1153,6 +1201,9 @@
         if (window.innerWidth < 768) {
           modal.style.maxWidth = '100%';
         }
+        
+        // 显示模态框
+        modal.style.display = 'flex';
       }
 
       // 隐藏弹框函数
@@ -1191,116 +1242,92 @@
         } 
       });
 
-      // 中英切換
-      document.addEventListener('DOMContentLoaded', function() {
-        // 获取语言切换按钮
-        const zhToggle = document.getElementById('zhToggle');
-        const enToggle = document.getElementById('enToggle');
+      // 设置语言函数
+      function setLanguage(lang) {
+        // 获取所有需要翻译的元素
+        const allElements = document.querySelectorAll('[data-zh], [data-en]');
         
-        // 默认中文按钮为激活状态
-        zhToggle.classList.add('active');
+        // 禁用事件监听，防止语言切换时触发其他事件
+        disableEventListeners();
         
-        // 设置当前语言
-        let currentLanguage = 'zh';
-        
-        // 中文按钮点击事件
-        zhToggle.addEventListener('click', function() {
-          if (currentLanguage !== 'zh') {
-            setLanguage('zh');
-            currentLanguage = 'zh';
-            zhToggle.classList.add('active');
-            enToggle.classList.remove('active');
-          }
-        });
-        
-        // 英文按钮点击事件
-        enToggle.addEventListener('click', function() {
-          if (currentLanguage !== 'en') {
-            setLanguage('en');
-            currentLanguage = 'en';
-            enToggle.classList.add('active');
-            zhToggle.classList.remove('active');
-          }
-        });
-        
-        // 设置语言函数
-        function setLanguage(lang) {
-          // 获取所有需要翻译的元素
-          const allElements = document.querySelectorAll('[data-zh], [data-en]');
+        allElements.forEach(element => {
+          // 获取对应语言的数据属性值
+          const text = element.getAttribute(`data-${lang}`);
           
-          allElements.forEach(element => {
-            // 获取对应语言的数据属性值
-            const text = element.getAttribute(`data-${lang}`);
+          // 如果有该语言的文本，则更新元素内容
+          if (text !== null) {
+            // 检查元素是否包含图标
+            const icon = element.querySelector('i');
             
-            // 如果有该语言的文本，则更新元素内容
-            if (text !== null) {
-              // 检查元素是否包含图标
-              const icon = element.querySelector('i');
+            if (icon) {
+              // 保留图标，只更新文本部分
+              const textNodes = Array.from(element.childNodes).filter(node => node.nodeType === 3 && node.textContent.trim() !== '');
               
-              if (icon) {
-                // 保留图标，只更新文本部分
-                const textNodes = Array.from(element.childNodes).filter(node => node.nodeType === 3 && node.textContent.trim() !== '');
-                
-                if (textNodes.length > 0) {
-                  // 替换第一个文本节点的内容
-                  textNodes[0].textContent = text;
-                } else {
-                  // 如果没有文本节点，添加一个
-                  element.appendChild(document.createTextNode(text));
-                }
+              if (textNodes.length > 0) {
+                // 替换第一个文本节点的内容
+                textNodes[0].textContent = text;
               } else {
-                // 没有图标，直接更新文本
-                element.textContent = text;
+                // 如果没有文本节点，添加一个
+                element.appendChild(document.createTextNode(text));
               }
+            } else {
+              // 没有图标，直接更新文本
+              element.textContent = text;
             }
-          });
-          
-          // 更新链接URL
-          updateLinksForLanguage(lang);
-          
-          // 更新HTML的lang属性
-          document.documentElement.lang = lang;
-          
-          // 存储用户语言偏好到localStorage
-          localStorage.setItem('mwiLanguage', lang);
-        }
+          }
+        });
         
-        // 根据语言更新链接URL
-        function updateLinksForLanguage(lang) {
-          // 选择所有greasyfork.org的链接
-          const greasyForkLinks = document.querySelectorAll('a[href*="greasyfork.org/"]');
-          
-          greasyForkLinks.forEach(link => {
-            let href = link.getAttribute('href');
-            
-            // 检查链接是否包含语言路径部分
-            if (href.includes('/zh-TW/') || href.includes('/en/')) {
-              if (lang === 'zh') {
-                // 切换到中文时，将/en/替换为/zh-TW/
-                href = href.replace('/en/', '/zh-TW/');
-              } else if (lang === 'en') {
-                // 切换到英文时，将/zh-TW/替换为/en/
-                href = href.replace('/zh-TW/', '/en/');
-              }
-              
-              // 更新链接
-              link.setAttribute('href', href);
+        // 更新链接URL
+        updateLinksForLanguage(lang);
+        
+        // 更新HTML的lang属性
+        document.documentElement.lang = lang;
+        
+        // 存储用户语言偏好到localStorage
+        localStorage.setItem('mwiLanguage', lang);
+        
+        // 重新启用事件监听
+        setTimeout(enableEventListeners, 300);
+      }
+
+      // 根据语言更新链接URL
+      function updateLinksForLanguage(lang) {
+        // 处理greasyfork链接
+        const greasyForkLinks = document.querySelectorAll('a[href*="greasyfork.org/"]');
+        greasyForkLinks.forEach(link => {
+          let href = link.getAttribute('href');
+          if (href.includes('/zh-TW/') || href.includes('/en/')) {
+            if (lang === 'zh') {
+              href = href.replace('/en/', '/zh-TW/');
+            } else if (lang === 'en') {
+              href = href.replace('/zh-TW/', '/en/');
             }
-          });
-        }
+            link.setAttribute('href', href);
+          }
+        });
         
-        // 初始化时检查localStorage中的语言偏好
-        const savedLanguage = localStorage.getItem('mwiLanguage');
-        if (savedLanguage === 'en') {
-          setLanguage('en');
-          currentLanguage = 'en';
-          enToggle.classList.add('active');
-          zhToggle.classList.remove('active');
-        } else {
-          // 首次加载时也需要更新链接
-          updateLinksForLanguage('zh');
-        }
-      });
+        // 处理友情链接
+        const friendLinks = document.querySelectorAll('#submenuFriendLinks a');
+        friendLinks.forEach(link => {
+          const zhHref = link.getAttribute('data-zh-href');
+          const enHref = link.getAttribute('data-en-href');
+          
+          if (zhHref && enHref) {
+            link.setAttribute('href', lang === 'zh' ? zhHref : enHref);
+          }
+        });
+      }
+
+      // 临时禁用事件监听器，防止语言切换时触发
+      function disableEventListeners() {
+        // 这里可以添加临时禁用事件监听的逻辑
+        // 例如设置一个标志位，在事件处理函数中检查这个标志位
+      }
+
+      // 重新启用事件监听器
+      function enableEventListeners() {
+        // 恢复事件监听的逻辑
+      }
 
     </script>
   </body>
